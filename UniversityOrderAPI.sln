@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniversityOrderAPI.API", "UniversityOrderAPI.API\UniversityOrderAPI.API.csproj", "{47BC5142-EA26-4281-BE30-067578207DA4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniversityOrderAPI.DAL", "UniversityOrderAPI.DAL\UniversityOrderAPI.DAL.csproj", "{54EFDBCB-B7BD-4F5B-B21F-0DB050B0BC04}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniversityOrderAPI.BLL", "UniversityOrderAPI.BLL\UniversityOrderAPI.BLL.csproj", "{88B1CBC4-B2BD-4FEA-B2F9-CE53A164E5D3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{47BC5142-EA26-4281-BE30-067578207DA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47BC5142-EA26-4281-BE30-067578207DA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47BC5142-EA26-4281-BE30-067578207DA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47BC5142-EA26-4281-BE30-067578207DA4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54EFDBCB-B7BD-4F5B-B21F-0DB050B0BC04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54EFDBCB-B7BD-4F5B-B21F-0DB050B0BC04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54EFDBCB-B7BD-4F5B-B21F-0DB050B0BC04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54EFDBCB-B7BD-4F5B-B21F-0DB050B0BC04}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88B1CBC4-B2BD-4FEA-B2F9-CE53A164E5D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88B1CBC4-B2BD-4FEA-B2F9-CE53A164E5D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88B1CBC4-B2BD-4FEA-B2F9-CE53A164E5D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88B1CBC4-B2BD-4FEA-B2F9-CE53A164E5D3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
