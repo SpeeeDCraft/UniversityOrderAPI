@@ -23,7 +23,7 @@ public class UniversityOrderAPIDbContext : DbContext
     
     public DbSet<StudentStore> StudentsStores { get; set; }
     public DbSet<Category> Categories { get; set; }
-    
+    public DbSet<Manufacturer> Manufacturers { get; set; }
 
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

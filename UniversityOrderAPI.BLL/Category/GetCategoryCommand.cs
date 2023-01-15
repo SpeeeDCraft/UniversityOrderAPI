@@ -15,9 +15,7 @@ public class GetCategoryCommandHandler : Command<UniversityOrderAPIDbContext>,
     ICommandHandler<GetCategoryCommand, GetCategoryCommandResult>
 {
     
-    public GetCategoryCommandHandler(UniversityOrderAPIDbContext dbContext) : base(dbContext)
-    {
-    }
+    public GetCategoryCommandHandler(UniversityOrderAPIDbContext dbContext) : base(dbContext) { }
 
     public Task<GetCategoryCommandResult> Handle(GetCategoryCommand request, CancellationToken? cancellationToken)
     {
