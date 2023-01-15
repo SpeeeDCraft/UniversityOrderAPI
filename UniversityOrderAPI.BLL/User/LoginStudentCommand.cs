@@ -31,10 +31,10 @@ public class LoginStudentCommandHandler : Command<UniversityOrderAPIDbContext>, 
             .SingleOrDefaultAsync(el => el.Identifier == request.Identifier);
 
         if (student == null)
-            throw new Exception("Идентификатор студента указан неверно");
+            throw new Exception("Student not found");
         
         if (student.StudentStore == null)
-            throw new Exception("Студент не привязан ни к одному студенту");
+            throw new Exception("Student not linked to any store");
 
         return new LoginStudentCommandResult(new StudentDTO
         {

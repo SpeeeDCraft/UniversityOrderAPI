@@ -5,26 +5,23 @@ namespace UniversityOrderAPI.BLL.Category;
 
 public record CreateCategoryCommand(
     int StudentStoreId,
-    string Name) : ICommand
-{
-    
-}
-
+    string Name
+) : ICommand;
 
 public record CreateCategoryCommandResult(
+    CategoryDTO Category
+) : ICommandResult;
 
-    CategoryDTO Category) : ICommandResult
-{
-    
-}
 
-public class CreateCategoryCommandHandler : Command<UniversityOrderAPIDbContext>, ICommandHandler<CreateCategoryCommand, CreateCategoryCommandResult>
+    public class CreateCategoryCommandHandler : Command<UniversityOrderAPIDbContext>,
+    ICommandHandler<CreateCategoryCommand, CreateCategoryCommandResult>
 {
     public CreateCategoryCommandHandler(UniversityOrderAPIDbContext dbContext) : base(dbContext)
     {
     }
 
-    public async Task<CreateCategoryCommandResult> Handle(CreateCategoryCommand request, CancellationToken? cancellationToken)
+    public async Task<CreateCategoryCommandResult> Handle(CreateCategoryCommand request,
+        CancellationToken? cancellationToken)
     {
         if (string.IsNullOrEmpty(request.Name))
             throw new Exception("");
@@ -33,12 +30,12 @@ public class CreateCategoryCommandHandler : Command<UniversityOrderAPIDbContext>
         {
             StudentStoreId = request.StudentStoreId,
             Name = request.Name
-        }; 
-        
+        };
+
         DbContext.Categories.Add(newCategory);
-        
+
         await DbContext.SaveChangesAsync();
-        
+
         return new CreateCategoryCommandResult(new CategoryDTO
         {
             Id = newCategory.Id,

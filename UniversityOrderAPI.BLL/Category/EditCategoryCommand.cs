@@ -5,18 +5,12 @@ namespace UniversityOrderAPI.BLL.Category;
 
 public record EditCategoryCommand(
     CategoryDTO Category
-    ):ICommand
-{
-    
-}
+) : ICommand;
 
 
 public record EditCategoryCommandResult(
     CategoryDTO Category
-):ICommandResult
-{
-    
-}
+) : ICommandResult;
 
 public class EditCategoryCommandHandler : Command<UniversityOrderAPIDbContext>,
     ICommandHandler<EditCategoryCommand, EditCategoryCommandResult>

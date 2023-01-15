@@ -4,10 +4,7 @@ using UniversityOrderAPI.DAL;
 namespace UniversityOrderAPI.Models.Category;
 
 public record DeleteCategoryCommand(
-    int CategoryId) : ICommand
-{
-    
-}
+    int CategoryId) : ICommand;
 
 public class DeleteCategoryCommandHandler :Command<UniversityOrderAPIDbContext>, ICommandHandler<DeleteCategoryCommand>
 {

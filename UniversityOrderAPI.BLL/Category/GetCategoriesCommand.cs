@@ -4,22 +4,13 @@ using UniversityOrderAPI.DAL;
 
 namespace UniversityOrderAPI.BLL.Category;
 
-
-
 public record GetCategoriesCommand(
     int StudentStoreId
-    ) : ICommand
-{
-    
-}
-
+) : ICommand;
 
 public record GetCategoriesCommandResult(
     IEnumerable<CategoryDTO> Categories
-) : ICommandResult
-{
-    
-}
+) : ICommandResult;
 
 public class GetCategoriesCommandHandler :Command<UniversityOrderAPIDbContext>, ICommandHandler<GetCategoriesCommand, GetCategoriesCommandResult>
 {
