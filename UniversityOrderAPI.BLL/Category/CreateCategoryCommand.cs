@@ -5,7 +5,7 @@ namespace UniversityOrderAPI.BLL.Category;
 
 public record CreateCategoryCommand(
     int StudentStoreId,
-    string Name
+    CategoryDTO Category
 ) : ICommand;
 
 public record CreateCategoryCommandResult(
@@ -23,13 +23,13 @@ public record CreateCategoryCommandResult(
     public async Task<CreateCategoryCommandResult> Handle(CreateCategoryCommand request,
         CancellationToken? cancellationToken)
     {
-        if (string.IsNullOrEmpty(request.Name))
-            throw new Exception("");
+        if (string.IsNullOrEmpty(request.Category.Name))
+            throw new Exception("Category name null or empty");
 
         var newCategory = new DAL.Models.Category
         {
             StudentStoreId = request.StudentStoreId,
-            Name = request.Name
+            Name = request.Category.Name
         };
 
         DbContext.Categories.Add(newCategory);

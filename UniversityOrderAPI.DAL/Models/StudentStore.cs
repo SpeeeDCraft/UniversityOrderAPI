@@ -19,5 +19,6 @@ public class StudentStore : BaseDBModel
     public int StoreId { get; set; }
     
     public Student Student { get; set; }
+    
     public Store Store { get; set; }
 }

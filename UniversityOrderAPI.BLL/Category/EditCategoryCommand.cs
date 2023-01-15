@@ -4,6 +4,7 @@ using UniversityOrderAPI.DAL;
 namespace UniversityOrderAPI.BLL.Category;
 
 public record EditCategoryCommand(
+    int StudentStoreId,
     CategoryDTO Category
 ) : ICommand;
 
@@ -21,8 +22,12 @@ public class EditCategoryCommandHandler : Command<UniversityOrderAPIDbContext>,
 
     public Task<EditCategoryCommandResult> Handle(EditCategoryCommand request, CancellationToken? cancellationToken)
     {
+        if (string.IsNullOrEmpty(request.Category.Name))
+            throw new Exception("Category name null or empty");
+        
         var category =  DbContext.Categories
-            .SingleOrDefault(el => el.Id == request.Category.Id);
+            .SingleOrDefault(el => el.Id == request.Category.Id
+                                   && el.StudentStoreId == request.StudentStoreId);
 
         if (category == null)
             throw new Exception("Category not found");
