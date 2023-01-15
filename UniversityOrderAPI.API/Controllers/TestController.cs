@@ -15,9 +15,9 @@ public class TestController:BaseApiController
 {
     public TestController(UniversityOrderAPIDbContext db) : base(db)
     {
+        
     }
-
-
+    
     [HttpGet("some")]
     public SomeTestClass GetSomeTestClass()
     {
