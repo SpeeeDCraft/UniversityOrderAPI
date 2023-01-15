@@ -9,5 +9,5 @@ public class Store:BaseDBModel
     /// <summary>
     /// Название
     /// </summary>
-    public int Name { get; set; }
+    public string Name { get; set; }
 }

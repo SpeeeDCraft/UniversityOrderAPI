@@ -14,10 +14,10 @@ public class StudentStore : BaseDBModel
     public int StudentId { get; set; }
     
     /// <summary>
-    /// Идентификатор группы
+    /// Идентификатор магазина
     /// </summary>
-    public int GroupId { get; set; }
+    public int StoreId { get; set; }
     
     public Student Student { get; set; }
-    public Group Group { get; set; }
+    public Store Store { get; set; }
 }
