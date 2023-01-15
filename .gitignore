@@ -1,3 +1,4 @@
 /UniversityOrderAPI.API/Dockerfile
 */bin/
 */obj/
+appsettings.json
