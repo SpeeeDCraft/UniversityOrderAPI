@@ -6,9 +6,8 @@ namespace UniversityOrderAPI.DAL;
 
 public class UniversityOrderAPIDbContext : DbContext
 {
-    private const string Connection = "Host=localhost;Port=5432;Database=UniversityOrder;Username=UniversityOrder;Password=<)w%+\\d{~nvm$Z39";
-
-
+    private const string Connection = "Host=5.188.119.237;Port=5432;Database=UniversityOrder;Username=universityOrderApi;Password=jSujyE^^4QE%Vp8uc$QR4a";
+    
     public UniversityOrderAPIDbContext()
         : base(new DbContextOptionsBuilder<UniversityOrderAPIDbContext>().UseNpgsql(Connection).Options) { }
 
