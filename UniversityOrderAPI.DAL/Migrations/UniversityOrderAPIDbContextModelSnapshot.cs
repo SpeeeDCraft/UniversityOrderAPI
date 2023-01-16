@@ -47,6 +47,43 @@ namespace UniversityOrderAPI.DAL.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("UniversityOrderAPI.DAL.Models.Client", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("text");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Sex")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("StudentStoreId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StudentStoreId");
+
+                    b.ToTable("Clients");
+                });
+
             modelBuilder.Entity("UniversityOrderAPI.DAL.Models.Manufacturer", b =>
                 {
                     b.Property<int>("Id")
@@ -76,6 +113,144 @@ namespace UniversityOrderAPI.DAL.Migrations
                     b.HasIndex("StudentStoreId");
 
                     b.ToTable("Manufacturers");
+                });
+
+            modelBuilder.Entity("UniversityOrderAPI.DAL.Models.Order", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<decimal>("OrderCost")
+                        .HasColumnType("numeric");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("StudentStoreId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("StudentStoreId");
+
+                    b.ToTable("Order");
+                });
+
+            modelBuilder.Entity("UniversityOrderAPI.DAL.Models.OrderItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("numeric");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<decimal?>("DiscountPercent")
+                        .HasColumnType("numeric");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("StudentStoreId")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("TotalCost")
+                        .HasColumnType("numeric");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("StudentStoreId");
+
+                    b.ToTable("OrderItems");
+                });
+
+            modelBuilder.Entity("UniversityOrderAPI.DAL.Models.Product", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Cost")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("ManufacturerId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("StudentStoreId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("ManufacturerId");
+
+                    b.HasIndex("StudentStoreId");
+
+                    b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("UniversityOrderAPI.DAL.Models.Purchase", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("StudentStoreId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StudentStoreId");
+
+                    b.ToTable("Purchases");
                 });
 
             modelBuilder.Entity("UniversityOrderAPI.DAL.Models.Store", b =>
@@ -178,7 +353,100 @@ namespace UniversityOrderAPI.DAL.Migrations
                     b.Navigation("StudentStore");
                 });
 
+            modelBuilder.Entity("UniversityOrderAPI.DAL.Models.Client", b =>
+                {
+                    b.HasOne("UniversityOrderAPI.DAL.Models.StudentStore", "StudentStore")
+                        .WithMany()
+                        .HasForeignKey("StudentStoreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("StudentStore");
+                });
+
             modelBuilder.Entity("UniversityOrderAPI.DAL.Models.Manufacturer", b =>
+                {
+                    b.HasOne("UniversityOrderAPI.DAL.Models.StudentStore", "StudentStore")
+                        .WithMany()
+                        .HasForeignKey("StudentStoreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("StudentStore");
+                });
+
+            modelBuilder.Entity("UniversityOrderAPI.DAL.Models.Order", b =>
+                {
+                    b.HasOne("UniversityOrderAPI.DAL.Models.Client", "Client")
+                        .WithMany()
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("UniversityOrderAPI.DAL.Models.StudentStore", "StudentStore")
+                        .WithMany()
+                        .HasForeignKey("StudentStoreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Client");
+
+                    b.Navigation("StudentStore");
+                });
+
+            modelBuilder.Entity("UniversityOrderAPI.DAL.Models.OrderItem", b =>
+                {
+                    b.HasOne("UniversityOrderAPI.DAL.Models.Order", null)
+                        .WithMany("Items")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("UniversityOrderAPI.DAL.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("UniversityOrderAPI.DAL.Models.StudentStore", "StudentStore")
+                        .WithMany()
+                        .HasForeignKey("StudentStoreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("StudentStore");
+                });
+
+            modelBuilder.Entity("UniversityOrderAPI.DAL.Models.Product", b =>
+                {
+                    b.HasOne("UniversityOrderAPI.DAL.Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("UniversityOrderAPI.DAL.Models.Manufacturer", "Manufacturer")
+                        .WithMany()
+                        .HasForeignKey("ManufacturerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("UniversityOrderAPI.DAL.Models.StudentStore", "StudentStore")
+                        .WithMany()
+                        .HasForeignKey("StudentStoreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Manufacturer");
+
+                    b.Navigation("StudentStore");
+                });
+
+            modelBuilder.Entity("UniversityOrderAPI.DAL.Models.Purchase", b =>
                 {
                     b.HasOne("UniversityOrderAPI.DAL.Models.StudentStore", "StudentStore")
                         .WithMany()
@@ -206,6 +474,11 @@ namespace UniversityOrderAPI.DAL.Migrations
                     b.Navigation("Store");
 
                     b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("UniversityOrderAPI.DAL.Models.Order", b =>
+                {
+                    b.Navigation("Items");
                 });
 
             modelBuilder.Entity("UniversityOrderAPI.DAL.Models.Student", b =>
