@@ -9,17 +9,14 @@ namespace UniversityOrderAPI.DAL;
 public class UniversityOrderAPIDbContext : DbContext
 {
     private static string Connection = ConnectionHelper.ConnectionString;
-
-
+    
     public UniversityOrderAPIDbContext()
         : base(new DbContextOptionsBuilder<UniversityOrderAPIDbContext>().UseNpgsql(Connection).Options) { }
-
     
     public UniversityOrderAPIDbContext(DbContextOptions<UniversityOrderAPIDbContext> options)
         : base(options)
     { }
-    
-    
+
     public DbSet<Student> Students { get; set; }
     
     public DbSet<Store> Stores { get; set; }
@@ -29,7 +26,6 @@ public class UniversityOrderAPIDbContext : DbContext
     public DbSet<Client> Clients { get; set; }
     public DbSet<Category> Categories { get; set; }
     public DbSet<Manufacturer> Manufacturers { get; set; }
-    
     public DbSet<Product> Products { get; set; }
 
     public DbSet<Order> Order { get; set; }
