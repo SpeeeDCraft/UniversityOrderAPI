@@ -7,6 +7,12 @@ public class SomeTestClass
 {
     public int A { get; set; }
     public int D { get; set; }
+
+    public SomeTestClass(int A, int D)
+    {
+        this.A = A;
+        this.D = D;
+    }
 }
 
 [ApiController]
@@ -18,9 +24,13 @@ public class TestController:BaseApiController
         
     }
     
-    [HttpGet("some")]
-    public SomeTestClass GetSomeTestClass()
+    [HttpGet("{id:int}")]
+    public SomeTestClass GetSomeTestClass(int id)
     {
-        return new SomeTestClass();
+        if (id == 1)
+            return new SomeTestClass(2, 3);
+        if (id == 2)
+            return new SomeTestClass(5, 6);
+        return new SomeTestClass(11, 11);
     }
 }

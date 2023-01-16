@@ -5,10 +5,12 @@ namespace UniversityOrderAPI.BLL.Manufacturer;
 
 public record GetManufacturerCommand(
     int StudentStoreId,
-    int ManufacturerId) : ICommand;
+    int ManufacturerId
+) : ICommand;
 
 public record GetManufacturerCommandResult(
-    ManufacturerDTO Manufacturer): ICommandResult;
+    ManufacturerDTO Manufacturer
+): ICommandResult;
 
 public class GetManufacturerCommandHandler : Command<UniversityOrderAPIDbContext>, ICommandHandler<GetManufacturerCommand, GetManufacturerCommandResult>
 {
@@ -25,7 +27,9 @@ public class GetManufacturerCommandHandler : Command<UniversityOrderAPIDbContext
         return Task.FromResult(new GetManufacturerCommandResult(new ManufacturerDTO
         {
             Id = manufacturer.Id,
-            Name = manufacturer.Name
+            Name = manufacturer.Name,
+            City = manufacturer.City,
+            Country = manufacturer.Country
         }));
     }
 }

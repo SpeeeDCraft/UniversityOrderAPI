@@ -25,7 +25,6 @@ public class UniversityOrderAPIDbContext : DbContext
     public DbSet<Category> Categories { get; set; }
     public DbSet<Manufacturer> Manufacturers { get; set; }
 
-
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder
