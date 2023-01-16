@@ -18,7 +18,7 @@ var connectionString = builder.Configuration.GetConnectionString("db");
 
 // инъекция контекста к базе данных для каждого запроса
 builder.Services.AddDbContext<UniversityOrderAPIDbContext>(option=>
-    option.UseNpgsql(connectionString));
+    option.UseNpgsql(connectionString,b => b.MigrationsAssembly("UniversityOrderAPI.DAL")));
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

@@ -1,13 +1,16 @@
+using System.Security.Cryptography.X509Certificates;
 using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using UniversityOrderAPI.DAL.Models;
 
 namespace UniversityOrderAPI.DAL;
 
 public class UniversityOrderAPIDbContext : DbContext
 {
-    private const string Connection = "Host=5.188.119.237;Port=5432;Database=UniversityOrder;Username=universityOrderApi;Password=jSujyE^^4QE%Vp8uc$QR4a";
-    
+    private static string Connection = ConnectionHelper.ConnectionString;
+
+
     public UniversityOrderAPIDbContext()
         : base(new DbContextOptionsBuilder<UniversityOrderAPIDbContext>().UseNpgsql(Connection).Options) { }
 
@@ -22,8 +25,18 @@ public class UniversityOrderAPIDbContext : DbContext
     public DbSet<Store> Stores { get; set; }
     
     public DbSet<StudentStore> StudentsStores { get; set; }
+    
+    public DbSet<Client> Clients { get; set; }
     public DbSet<Category> Categories { get; set; }
     public DbSet<Manufacturer> Manufacturers { get; set; }
+    
+    public DbSet<Product> Products { get; set; }
+
+    public DbSet<Order> Order { get; set; }
+    
+    public DbSet<OrderItem> OrderItems { get; set; }
+    
+    public DbSet<Purchase> Purchases { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
