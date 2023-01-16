@@ -1,6 +1,5 @@
 using UniversityOrderAPI.BLL.Command;
 using UniversityOrderAPI.DAL;
-using UniversityOrderAPI.DAL.Models;
 
 namespace UniversityOrderAPI.Models.Category;
 
@@ -10,9 +9,7 @@ public record DeleteCategoryCommand(
 
 public class DeleteCategoryCommandHandler : Command<UniversityOrderAPIDbContext>, ICommandHandler<DeleteCategoryCommand>
 {
-    public DeleteCategoryCommandHandler(UniversityOrderAPIDbContext dbContext) : base(dbContext)
-    {
-    }
+    public DeleteCategoryCommandHandler(UniversityOrderAPIDbContext dbContext) : base(dbContext) { }
 
     public Task Handle(DeleteCategoryCommand request, CancellationToken? cancellationToken)
     {

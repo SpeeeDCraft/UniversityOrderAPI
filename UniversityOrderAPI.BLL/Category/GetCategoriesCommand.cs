@@ -14,21 +14,19 @@ public record GetCategoriesCommandResult(
 
 public class GetCategoriesCommandHandler :Command<UniversityOrderAPIDbContext>, ICommandHandler<GetCategoriesCommand, GetCategoriesCommandResult>
 {
-    public async Task<GetCategoriesCommandResult> Handle(GetCategoriesCommand request, CancellationToken? cancellationToken)
+    public GetCategoriesCommandHandler(UniversityOrderAPIDbContext dbContext) : base(dbContext) { }
+    
+    public Task<GetCategoriesCommandResult> Handle(GetCategoriesCommand request, CancellationToken? cancellationToken)
     {
-        var categories = await DbContext.Categories
+        var categories = DbContext.Categories
             .Where(el => el.StudentStoreId == request.StudentStoreId)
             .Select(el=>new CategoryDTO
             {
                 Id = el.Id,
                 Name = el.Name
             })
-            .ToListAsync();
+            .ToList();
 
-        return new GetCategoriesCommandResult(categories);
-    }
-
-    public GetCategoriesCommandHandler(UniversityOrderAPIDbContext dbContext) : base(dbContext)
-    {
+        return Task.FromResult(new GetCategoriesCommandResult(categories));
     }
 }

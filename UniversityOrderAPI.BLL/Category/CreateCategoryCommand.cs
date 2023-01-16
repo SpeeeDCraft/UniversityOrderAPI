@@ -16,11 +16,9 @@ public record CreateCategoryCommandResult(
     public class CreateCategoryCommandHandler : Command<UniversityOrderAPIDbContext>,
     ICommandHandler<CreateCategoryCommand, CreateCategoryCommandResult>
 {
-    public CreateCategoryCommandHandler(UniversityOrderAPIDbContext dbContext) : base(dbContext)
-    {
-    }
+    public CreateCategoryCommandHandler(UniversityOrderAPIDbContext dbContext) : base(dbContext) { }
 
-    public async Task<CreateCategoryCommandResult> Handle(CreateCategoryCommand request,
+    public Task<CreateCategoryCommandResult> Handle(CreateCategoryCommand request,
         CancellationToken? cancellationToken)
     {
         if (string.IsNullOrEmpty(request.Category.Name))
@@ -34,12 +32,12 @@ public record CreateCategoryCommandResult(
 
         DbContext.Categories.Add(newCategory);
 
-        await DbContext.SaveChangesAsync();
+        DbContext.SaveChanges();
 
-        return new CreateCategoryCommandResult(new CategoryDTO
+        return Task.FromResult(new CreateCategoryCommandResult(new CategoryDTO
         {
             Id = newCategory.Id,
             Name = newCategory.Name
-        });
+        }));
     }
 }

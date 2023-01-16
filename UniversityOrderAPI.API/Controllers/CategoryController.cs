@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using UniversityOrderAPI.BLL.Category;
 using UniversityOrderAPI.BLL.Command;
 using UniversityOrderAPI.DAL;
@@ -13,95 +12,93 @@ namespace UniversityOrderAPI.Controllers;
 [Route("[controller]")]
 public class CategoryController : BaseApiController
 {
-    public CategoryController(UniversityOrderAPIDbContext db) : base(db)
-    {
-    }
+    public CategoryController(UniversityOrderAPIDbContext db) : base(db) { }
     
     [HttpGet("{id:int}")]
-    public async Task<GetCategoryResponse> GetCategory(int id)
+    public Task<GetCategoryResponse> GetCategory(int id)
     {
 
         ICommandHandler<GetCategoryCommand, GetCategoryCommandResult>
             commandHandler = new GetCategoryCommandHandler(Db);
         
-        var response = await  commandHandler
+        var response = commandHandler
             .Handle(new GetCategoryCommand(GetStudentStoreId, id), new CancellationToken());
 
-        return new GetCategoryResponse
+        return Task.FromResult(new GetCategoryResponse
         {
             Item = new CategoryAPIDTO
             {
-                Id = response.Category.Id,
-                Name = response.Category.Name
+                Id = response.Result.Category.Id,
+                Name = response.Result.Category.Name
             }
-        };
+        });
     }
 
 
     [HttpGet("list")]
-    public async Task<GetCategoriesResponse> GetCategories()
+    public Task<GetCategoriesResponse> GetCategories()
     {
         ICommandHandler<GetCategoriesCommand, GetCategoriesCommandResult> commandHandler
             = new GetCategoriesCommandHandler(Db);
 
-        var response = await commandHandler
+        var response = commandHandler
             .Handle(new GetCategoriesCommand(GetStudentStoreId), new CancellationToken());
 
-        return new GetCategoriesResponse
+        return Task.FromResult(new GetCategoriesResponse
         {
-            Items = response.Categories.Select(el => new CategoryAPIDTO
+            Items = response.Result.Categories.Select(el => new CategoryAPIDTO
             {
                 Id = el.Id,
                 Name = el.Name
             })
-        };
+        });
     }
 
 
     [HttpPost]
-    public async Task<CreateCategoryResponse> CreateCategory([FromBody] CreateCategoryRequest request)
+    public Task<CreateCategoryResponse> CreateCategory([FromBody] CreateCategoryRequest request)
     {
         ICommandHandler<CreateCategoryCommand, CreateCategoryCommandResult> commandHandler =
             new CreateCategoryCommandHandler(Db);
 
-        var response = await commandHandler
+        var response = commandHandler
             .Handle(new CreateCategoryCommand(GetStudentStoreId, new CategoryDTO
             {
                 Name = request.Name
             }), new CancellationToken());
 
-        return new CreateCategoryResponse
+        return Task.FromResult(new CreateCategoryResponse
         {
             Item = new CategoryAPIDTO
             {
-                Id = response.Category.Id,
-                Name = response.Category.Name
+                Id = response.Result.Category.Id,
+                Name = response.Result.Category.Name
             }
-        };
+        });
     }
 
 
     [HttpPatch]
-    public async Task<EditCategoryResponse> EditCategory([FromBody] EditCategoryRequest request)
+    public Task<EditCategoryResponse> EditCategory([FromBody] EditCategoryRequest request)
     {
         ICommandHandler<EditCategoryCommand, EditCategoryCommandResult> commandHandler =
             new EditCategoryCommandHandler(Db);
 
-        var response = await commandHandler.Handle(
+        var response = commandHandler.Handle(
             new EditCategoryCommand(GetStudentStoreId, new CategoryDTO
             {
                 Id = request.Item.Id,
                 Name = request.Item.Name
             }), new CancellationToken());
 
-        return new EditCategoryResponse
+        return Task.FromResult(new EditCategoryResponse
         {
             Item = new CategoryAPIDTO
             {
-                Id = response.Category.Id,
-                Name = response.Category.Name
+                Id = response.Result.Category.Id,
+                Name = response.Result.Category.Name
             }
-        };
+        });
     }
 
     [HttpDelete("{id:int}")]

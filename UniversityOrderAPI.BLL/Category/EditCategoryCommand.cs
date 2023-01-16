@@ -16,9 +16,7 @@ public record EditCategoryCommandResult(
 public class EditCategoryCommandHandler : Command<UniversityOrderAPIDbContext>,
     ICommandHandler<EditCategoryCommand, EditCategoryCommandResult>
 {
-    public EditCategoryCommandHandler(UniversityOrderAPIDbContext dbContext) : base(dbContext)
-    {
-    }
+    public EditCategoryCommandHandler(UniversityOrderAPIDbContext dbContext) : base(dbContext) { }
 
     public Task<EditCategoryCommandResult> Handle(EditCategoryCommand request, CancellationToken? cancellationToken)
     {
