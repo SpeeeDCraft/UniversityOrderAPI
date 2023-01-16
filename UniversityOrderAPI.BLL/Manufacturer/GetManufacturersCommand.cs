@@ -9,7 +9,7 @@ public record GetManufacturersCommand(
 ) : ICommand;
 
 public record GetManufacturersCommandResult(
-    IEnumerable<ManufacturerDTO> manufacturers
+    IEnumerable<ManufacturerDTO> Manufacturers
 ) : ICommandResult;
 
 public class GetManufacturersCommandHandler : Command<UniversityOrderAPIDbContext>,
@@ -17,9 +17,9 @@ public class GetManufacturersCommandHandler : Command<UniversityOrderAPIDbContex
 {
     public GetManufacturersCommandHandler(UniversityOrderAPIDbContext dbContext) : base(dbContext) { }
 
-    public async Task<GetManufacturersCommandResult> Handle(GetManufacturersCommand request, CancellationToken? cancellationToken)
+    public Task<GetManufacturersCommandResult> Handle(GetManufacturersCommand request, CancellationToken? cancellationToken)
     {
-        var manufacturers = await DbContext.Manufacturers
+        var manufacturers = DbContext.Manufacturers
             .Where(el => el.StudentStoreId == request.StudentStoreId)
             .Select(el => new ManufacturerDTO
             {
@@ -28,8 +28,8 @@ public class GetManufacturersCommandHandler : Command<UniversityOrderAPIDbContex
                 City = el.City,
                 Country = el.Country
             })
-            .ToListAsync();
+            .ToList();
 
-        return new GetManufacturersCommandResult(manufacturers);
+        return Task.FromResult(new GetManufacturersCommandResult(manufacturers));
     }
 }

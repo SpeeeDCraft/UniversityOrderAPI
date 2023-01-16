@@ -17,7 +17,7 @@ public class CreateManufacturerCommandHandler : Command<UniversityOrderAPIDbCont
 {
     public CreateManufacturerCommandHandler(UniversityOrderAPIDbContext dbContext) : base(dbContext) { }
 
-    public async Task<CreateManufacturerCommandResult> Handle(CreateManufacturerCommand request, CancellationToken? cancellationToken)
+    public Task<CreateManufacturerCommandResult> Handle(CreateManufacturerCommand request, CancellationToken? cancellationToken)
     {
         if (string.IsNullOrEmpty(request.Manufacturer.Name))
             throw new Exception("Manufacturer name null or empty");
@@ -32,9 +32,9 @@ public class CreateManufacturerCommandHandler : Command<UniversityOrderAPIDbCont
 
         DbContext.Manufacturers.Add(newManufacturer);
         
-        await DbContext.SaveChangesAsync();
+        DbContext.SaveChanges();
 
-        return new CreateManufacturerCommandResult(
+        return Task.FromResult(new CreateManufacturerCommandResult(
             new ManufacturerDTO
             {
                 Id = newManufacturer.Id,
@@ -42,7 +42,7 @@ public class CreateManufacturerCommandHandler : Command<UniversityOrderAPIDbCont
                 City = newManufacturer.City,
                 Country = newManufacturer.Country
             }
-        );
+        ));
     }
 }
 
