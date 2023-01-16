@@ -1,5 +1,6 @@
 /UniversityOrderAPI.API/Dockerfile
 */bin/
 */obj/
+discord.xml
 appsettings.json
 Connection.cs
