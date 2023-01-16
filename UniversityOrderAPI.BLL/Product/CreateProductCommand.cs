@@ -17,7 +17,7 @@ public class CreateProductCommandHandler : Command<UniversityOrderAPIDbContext>,
 {
     public CreateProductCommandHandler(UniversityOrderAPIDbContext dbContext) : base(dbContext) { }
 
-    public async Task<CreateProductCommandResult> Handle(CreateProductCommand request, CancellationToken? cancellationToken)
+    public Task<CreateProductCommandResult> Handle(CreateProductCommand request, CancellationToken? cancellationToken)
     {
         if (string.IsNullOrEmpty(request.Product.Name))
             throw new Exception("Product name is null or empty");
@@ -43,9 +43,9 @@ public class CreateProductCommandHandler : Command<UniversityOrderAPIDbContext>,
 
         DbContext.Products.Add(newProduct);
 
-        await DbContext.SaveChangesAsync();
+        DbContext.SaveChanges();
 
-        return new CreateProductCommandResult(
+        return Task.FromResult(new CreateProductCommandResult(
             new ProductDTO
             {
                 Id = newProduct.Id,
@@ -55,6 +55,6 @@ public class CreateProductCommandHandler : Command<UniversityOrderAPIDbContext>,
                 CategoryId = newProduct.CategoryId,
                 ManufacturerId = newProduct.ManufacturerId
             }
-        );
+        ));
     }
 }

@@ -17,9 +17,9 @@ public class GetProductsCommandHandler : Command<UniversityOrderAPIDbContext>,
 {
     public GetProductsCommandHandler(UniversityOrderAPIDbContext dbContext) : base(dbContext) { }
 
-    public async Task<GetProductsCommandResult> Handle(GetProductsCommand request, CancellationToken? cancellationToken)
+    public Task<GetProductsCommandResult> Handle(GetProductsCommand request, CancellationToken? cancellationToken)
     {
-        var products = await DbContext.Products
+        var products = DbContext.Products
             .Where(el => el.StudentStoreId == request.StudentStoreId)
             .Select(el => new ProductDTO
             {
@@ -30,8 +30,8 @@ public class GetProductsCommandHandler : Command<UniversityOrderAPIDbContext>,
                 CategoryId = el.CategoryId,
                 ManufacturerId = el.ManufacturerId,
             })
-            .ToListAsync();
+            .ToList();
 
-        return new GetProductsCommandResult(products);
+        return Task.FromResult(new GetProductsCommandResult(products));
     }
 }
