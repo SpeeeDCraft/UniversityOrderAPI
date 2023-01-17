@@ -1,4 +1,5 @@
-﻿using UniversityOrderAPI.BLL.Command;
+﻿using Microsoft.EntityFrameworkCore;
+using UniversityOrderAPI.BLL.Command;
 using UniversityOrderAPI.DAL;
 
 namespace UniversityOrderAPI.BLL.Product;
@@ -17,7 +18,7 @@ public class CreateProductCommandHandler : Command<UniversityOrderAPIDbContext>,
 {
     public CreateProductCommandHandler(UniversityOrderAPIDbContext dbContext) : base(dbContext) { }
 
-    public Task<CreateProductCommandResult> Handle(CreateProductCommand request, CancellationToken? cancellationToken)
+    public async Task<CreateProductCommandResult> Handle(CreateProductCommand request, CancellationToken? cancellationToken)
     {
         if (string.IsNullOrEmpty(request.Product.Name))
             throw new Exception("Product name is null or empty");
@@ -25,10 +26,16 @@ public class CreateProductCommandHandler : Command<UniversityOrderAPIDbContext>,
         if (string.IsNullOrEmpty(request.Product.Description))
             throw new Exception("Product description is null or empty");
 
-        if (!DbContext.Categories.Any(el => el.Id == request.Product.CategoryId))
+        var categoryExists = DbContext.Categories
+            .AnyAsync(el => el.Id == request.Product.CategoryId);
+
+        var manufacturerExists = DbContext.Manufacturers
+            .AnyAsync(el => el.Id == request.Product.ManufacturerId);
+        
+        if (!await categoryExists)
             throw new Exception("CategoryId not found");
     
-        if (!DbContext.Manufacturers.Any(el => el.Id == request.Product.ManufacturerId))
+        if (!await manufacturerExists)
             throw new Exception("ManufacturerId not found");
         
         var newProduct = new DAL.Models.Product
@@ -45,7 +52,7 @@ public class CreateProductCommandHandler : Command<UniversityOrderAPIDbContext>,
 
         DbContext.SaveChanges();
 
-        return Task.FromResult(new CreateProductCommandResult(
+        return new CreateProductCommandResult(
             new ProductDTO
             {
                 Id = newProduct.Id,
@@ -55,6 +62,6 @@ public class CreateProductCommandHandler : Command<UniversityOrderAPIDbContext>,
                 CategoryId = newProduct.CategoryId,
                 ManufacturerId = newProduct.ManufacturerId
             }
-        ));
+        );
     }
 }
