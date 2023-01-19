@@ -1,3 +1,4 @@
+using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using UniversityOrderAPI.BLL.Category;
 using UniversityOrderAPI.BLL.Command;
@@ -26,11 +27,7 @@ public class CategoryController : BaseApiController
 
         return new GetCategoryResponse
         {
-            Item = new CategoryAPIDTO
-            {
-                Id = response.Category.Id,
-                Name = response.Category.Name
-            }
+            Item = response.Category.Adapt<CategoryAPIDTO>()
         };
     }
 
@@ -46,11 +43,7 @@ public class CategoryController : BaseApiController
 
         return new GetCategoriesResponse
         {
-            Items = response.Categories.Select(el => new CategoryAPIDTO
-            {
-                Id = el.Id,
-                Name = el.Name
-            })
+            Items = response.Categories.Select(el => el.Adapt<CategoryAPIDTO>())
         };
     }
 
@@ -62,18 +55,11 @@ public class CategoryController : BaseApiController
             new CreateCategoryCommandHandler(Db);
 
         var response = await commandHandler
-            .Handle(new CreateCategoryCommand(GetStudentStoreId, new CategoryDTO
-            {
-                Name = request.Name
-            }), new CancellationToken());
+            .Handle(new CreateCategoryCommand(GetStudentStoreId, request.Adapt<CategoryDTO>()), new CancellationToken());
 
         return new CreateCategoryResponse
         {
-            Item = new CategoryAPIDTO
-            {
-                Id = response.Category.Id,
-                Name = response.Category.Name
-            }
+            Item = response.Category.Adapt<CategoryAPIDTO>()
         };
     }
 
@@ -85,19 +71,11 @@ public class CategoryController : BaseApiController
             new EditCategoryCommandHandler(Db);
 
         var response = await commandHandler.Handle(
-            new EditCategoryCommand(GetStudentStoreId, new CategoryDTO
-            {
-                Id = request.Item.Id,
-                Name = request.Item.Name
-            }), new CancellationToken());
+            new EditCategoryCommand(GetStudentStoreId, request.Item.Adapt<CategoryDTO>()), new CancellationToken());
 
         return new EditCategoryResponse
         {
-            Item = new CategoryAPIDTO
-            {
-                Id = response.Category.Id,
-                Name = response.Category.Name
-            }
+            Item = response.Category.Adapt<CategoryAPIDTO>()
         };
     }
 
