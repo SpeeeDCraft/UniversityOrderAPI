@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Mapster;
+using Microsoft.AspNetCore.Mvc;
 using UniversityOrderAPI.BLL.Command;
 using UniversityOrderAPI.BLL.Product;
 using UniversityOrderAPI.DAL;
@@ -25,15 +26,7 @@ public class ProductController : BaseApiController
 
         return new GetProductResponse
         {
-            Item = new ProductAPIDTO
-            {
-                Id = response.Product.Id,
-                Name = response.Product.Name,
-                Description = response.Product.Description,
-                Cost = response.Product.Cost,
-                CategoryId = response.Product.CategoryId,
-                ManufacturerId = response.Product.ManufacturerId
-            }
+            Item = response.Product.Adapt<ProductAPIDTO>()
         };
     }
 
@@ -48,15 +41,7 @@ public class ProductController : BaseApiController
 
         return new GetProductsResponse
         {
-            Items = response.Products.Select(el => new ProductAPIDTO
-            {
-                Id = el.Id,
-                Name = el.Name,
-                Description = el.Description,
-                Cost = el.Cost,
-                CategoryId = el.CategoryId,
-                ManufacturerId = el.ManufacturerId
-            })
+            Items = response.Products.Select(el => el.Adapt<ProductAPIDTO>())
         };
     }
 
@@ -67,26 +52,11 @@ public class ProductController : BaseApiController
             commandHandler = new CreateProductCommandHandler(Db);
 
         var response = await commandHandler
-            .Handle(new CreateProductCommand(GetStudentStoreId, new ProductDTO
-                {
-                    Name = request.Name,
-                    Description = request.Description,
-                    Cost = request.Cost,
-                    CategoryId = request.CategoryId,
-                    ManufacturerId = request.ManufacturerId
-                }), new CancellationToken());
+            .Handle(new CreateProductCommand(GetStudentStoreId, request.Adapt<ProductDTO>()), new CancellationToken());
 
         return new CreateProductResponse
         {
-            Item = new ProductAPIDTO
-            {
-                Id = response.Product.Id,
-                Name = response.Product.Name,
-                Description = response.Product.Description,
-                Cost = response.Product.Cost,
-                CategoryId = response.Product.CategoryId,
-                ManufacturerId = response.Product.ManufacturerId
-            }
+            Item = response.Product.Adapt<ProductAPIDTO>()
         };
     }
 
@@ -97,27 +67,11 @@ public class ProductController : BaseApiController
             commandHandler = new EditProductCommandHandler(Db);
         
         var response = await commandHandler
-            .Handle(new EditProductCommand(GetStudentStoreId, new ProductDTO
-            {
-                Id = request.Item.Id,
-                Name = request.Item.Name,
-                Description = request.Item.Description,
-                Cost = request.Item.Cost,
-                CategoryId = request.Item.CategoryId,
-                ManufacturerId = request.Item.ManufacturerId
-            }), new CancellationToken());
+            .Handle(new EditProductCommand(GetStudentStoreId, request.Item.Adapt<ProductDTO>()), new CancellationToken());
 
         return new EditProductResponse
         {
-            Item = new ProductAPIDTO
-            {
-                Id = response.Product.Id,
-                Name = response.Product.Name,
-                Description = response.Product.Description,
-                Cost = response.Product.Cost,
-                CategoryId = response.Product.CategoryId,
-                ManufacturerId = response.Product.ManufacturerId
-            }
+            Item = response.Product.Adapt<ProductAPIDTO>()
         };
     }
 
