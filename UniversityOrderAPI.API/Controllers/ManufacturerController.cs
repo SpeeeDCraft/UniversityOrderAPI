@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Mapster;
+using Microsoft.AspNetCore.Mvc;
 using UniversityOrderAPI.BLL.Command;
 using UniversityOrderAPI.BLL.Manufacturer;
 using UniversityOrderAPI.DAL;
@@ -25,13 +26,7 @@ public class ManufacturerController : BaseApiController
 
         return new GetManufacturerResponse
         {
-            Item = new ManufacturerAPIDTO
-            {
-                Id = response.Manufacturer.Id,
-                Name = response.Manufacturer.Name,
-                City = response.Manufacturer.City,
-                Country = response.Manufacturer.Country
-            }
+            Item = response.Manufacturer.Adapt<ManufacturerAPIDTO>()
         };
     }
 
@@ -46,13 +41,7 @@ public class ManufacturerController : BaseApiController
 
         return new GetManufacturersResponse
         {
-            Items = response.Manufacturers.Select(el => new ManufacturerAPIDTO
-            {
-                Id = el.Id,
-                Name = el.Name,
-                City = el.City,
-                Country = el.Country
-            })
+            Items = response.Manufacturers.Select(el => el.Adapt<ManufacturerAPIDTO>())
         };
     }
 
@@ -63,22 +52,11 @@ public class ManufacturerController : BaseApiController
             new CreateManufacturerCommandHandler(Db);
 
         var response = await commandHandler
-            .Handle(new CreateManufacturerCommand(GetStudentStoreId, new ManufacturerDTO
-            {
-                Name = request.Name,
-                City = request.City,
-                Country = request.Country
-            }), new CancellationToken());
+            .Handle(new CreateManufacturerCommand(GetStudentStoreId, request.Adapt<ManufacturerDTO>()), new CancellationToken());
 
         return new CreateManufacturerResponse
         {
-            Item = new ManufacturerAPIDTO
-            {
-                Id = response.Manufacturer.Id,
-                Name = response.Manufacturer.Name,
-                City = response.Manufacturer.City,
-                Country = response.Manufacturer.Country
-            }
+            Item = response.Manufacturer.Adapt<ManufacturerAPIDTO>()
         };
     }
 
@@ -89,23 +67,11 @@ public class ManufacturerController : BaseApiController
             new EditManufacturerCommandHandler(Db);
 
         var response = await commandHandler
-            .Handle(new EditManufacturerCommand(GetStudentStoreId, new ManufacturerDTO
-            {
-                Id = request.Item.Id,
-                Name = request.Item.Name,
-                City = request.Item.City,
-                Country = request.Item.Country
-            }), new CancellationToken());
+            .Handle(new EditManufacturerCommand(GetStudentStoreId, request.Adapt<ManufacturerDTO>()), new CancellationToken());
 
         return new EditManufacturerResponse
         {
-            Item = new ManufacturerAPIDTO
-            {
-                Id = response.Manufacturer.Id,
-                Name = response.Manufacturer.Name,
-                City = response.Manufacturer.City,
-                Country = response.Manufacturer.Country
-            }
+            Item = response.Manufacturer.Adapt<ManufacturerAPIDTO>()
         };
     }
 
