@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Mapster;
+using Microsoft.AspNetCore.Mvc;
 using UniversityOrderAPI.BLL.Client;
 using UniversityOrderAPI.BLL.Command;
 using UniversityOrderAPI.DAL;
-using UniversityOrderAPI.DAL.Models;
 using UniversityOrderAPI.Middleware.Auth;
 using UniversityOrderAPI.Models.Client;
 
@@ -26,15 +26,7 @@ public class ClientController : BaseApiController
 
         return new GetClientResponse
         {
-            Item = new ClientAPIDTO
-            {
-                Id = response.Client.Id,
-                Sex = response.Client.Sex,
-                FirstName = response.Client.FirstName,
-                LastName = response.Client.LastName,
-                Email = response.Client.Email,
-                PhoneNumber = response.Client.PhoneNumber
-            }
+            Item = response.Client.Adapt<ClientAPIDTO>()
         };
     }
 
@@ -49,17 +41,8 @@ public class ClientController : BaseApiController
 
         return new GetClientsResponse
         {
-            Items = response.Clients.Select(el => new ClientAPIDTO
-            {
-                Id = el.Id,
-                Sex = el.Sex,
-                FirstName = el.FirstName,
-                LastName = el.LastName,
-                Email = el.Email,
-                PhoneNumber = el.PhoneNumber
-            })
+            Items = response.Clients.Select(el => el.Adapt<ClientAPIDTO>())
         };
-
     }
 
     [HttpPost]
@@ -69,26 +52,11 @@ public class ClientController : BaseApiController
             new CreateClientCommandHandler(Db);
 
         var response = await commandHandler
-            .Handle(new CreateClientCommand(GetStudentStoreId, new ClientDTO
-            {
-                Sex = request.Sex,
-                FirstName = request.FirstName,
-                LastName = request.LastName,
-                Email = request.Email,
-                PhoneNumber = request.PhoneNumber
-            }), new CancellationToken());
+            .Handle(new CreateClientCommand(GetStudentStoreId, request.Adapt<ClientDTO>()), new CancellationToken());
 
         return new CreateClientResponse
         {
-            Item = new ClientAPIDTO
-            {
-                Id = response.Client.Id,
-                Sex = response.Client.Sex,
-                FirstName = response.Client.FirstName,
-                LastName = response.Client.LastName,
-                Email = response.Client.Email,
-                PhoneNumber = response.Client.PhoneNumber
-            }
+            Item = response.Client.Adapt<ClientAPIDTO>()
         };
     }
 
@@ -99,27 +67,11 @@ public class ClientController : BaseApiController
             new EditClientCommandHandler(Db);
 
         var response = await commandHandler
-            .Handle(new EditClientCommand(GetStudentStoreId, new ClientDTO
-            {
-                Id = request.Item.Id,
-                Sex = request.Item.Sex,
-                FirstName = request.Item.FirstName,
-                LastName = request.Item.LastName,
-                Email = request.Item.Email,
-                PhoneNumber = request.Item.PhoneNumber
-            }), new CancellationToken());
+            .Handle(new EditClientCommand(GetStudentStoreId, request.Item.Adapt<ClientDTO>()), new CancellationToken());
 
         return new EditClientResponse
         {
-            Item = new ClientAPIDTO
-            {
-                Id = response.Client.Id,
-                Sex = response.Client.Sex,
-                FirstName = response.Client.FirstName,
-                LastName = response.Client.LastName,
-                Email = response.Client.Email,
-                PhoneNumber = response.Client.PhoneNumber
-            }
+            Item = response.Client.Adapt<ClientAPIDTO>()
         };
     }
     
