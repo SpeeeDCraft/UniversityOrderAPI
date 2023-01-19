@@ -1,4 +1,7 @@
-﻿namespace UniversityOrderAPI.BLL.Product;
+﻿using UniversityOrderAPI.BLL.Category;
+using UniversityOrderAPI.BLL.Manufacturer;
+
+namespace UniversityOrderAPI.BLL.Product;
 
 public class ProductDTO
 {
@@ -14,6 +17,6 @@ public class ProductDTO
 
     public string Description { get; set; }
     
-    public DAL.Models.Category Category { get; set; }
-    public DAL.Models.Manufacturer Manufacturer { get; set; }
+    public CategoryDTO Category { get; set; }
+    public ManufacturerDTO Manufacturer { get; set; }
 }
