@@ -1,4 +1,5 @@
-﻿using UniversityOrderAPI.BLL.Command;
+﻿using Mapster;
+using UniversityOrderAPI.BLL.Command;
 using UniversityOrderAPI.DAL;
 
 namespace UniversityOrderAPI.BLL.Client;
@@ -27,14 +28,6 @@ public class GetClientCommandHandler : Command<UniversityOrderAPIDbContext>,
 
         return Task.FromResult(
             new GetClientCommandResult(
-                new ClientDTO
-                {
-                    Id = client.Id,
-                    Sex = client.Sex,
-                    FirstName = client.FirstName,
-                    LastName = client.LastName,
-                    Email = client.Email,
-                    PhoneNumber = client.PhoneNumber
-                }));
+                client.Adapt<ClientDTO>()));
     }
 }

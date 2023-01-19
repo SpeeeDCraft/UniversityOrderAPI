@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Mapster;
+using Microsoft.EntityFrameworkCore;
 using UniversityOrderAPI.BLL.Command;
 using UniversityOrderAPI.DAL;
 
@@ -50,18 +51,10 @@ public class CreateProductCommandHandler : Command<UniversityOrderAPIDbContext>,
 
         DbContext.Products.Add(newProduct);
 
-        DbContext.SaveChanges();
+        await DbContext.SaveChangesAsync();
 
         return new CreateProductCommandResult(
-            new ProductDTO
-            {
-                Id = newProduct.Id,
-                Name = newProduct.Name,
-                Description = newProduct.Description,
-                Cost = newProduct.Cost,
-                CategoryId = newProduct.CategoryId,
-                ManufacturerId = newProduct.ManufacturerId
-            }
+            newProduct.Adapt<ProductDTO>()
         );
     }
 }

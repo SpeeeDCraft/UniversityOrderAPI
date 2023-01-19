@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Mapster;
+using Microsoft.EntityFrameworkCore;
 using UniversityOrderAPI.BLL.Command;
 using UniversityOrderAPI.DAL;
 
@@ -21,13 +22,7 @@ public class GetManufacturersCommandHandler : Command<UniversityOrderAPIDbContex
     {
         var manufacturers = DbContext.Manufacturers
             .Where(el => el.StudentStoreId == request.StudentStoreId)
-            .Select(el => new ManufacturerDTO
-            {
-                Id = el.Id,
-                Name = el.Name,
-                City = el.City,
-                Country = el.Country
-            })
+            .Select(el => el.Adapt<ManufacturerDTO>())
             .ToList();
 
         return Task.FromResult(new GetManufacturersCommandResult(manufacturers));

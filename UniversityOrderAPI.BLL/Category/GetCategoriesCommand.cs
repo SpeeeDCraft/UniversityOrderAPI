@@ -1,3 +1,4 @@
+using Mapster;
 using Microsoft.EntityFrameworkCore;
 using UniversityOrderAPI.BLL.Command;
 using UniversityOrderAPI.DAL;
@@ -20,11 +21,7 @@ public class GetCategoriesCommandHandler :Command<UniversityOrderAPIDbContext>, 
     {
         var categories = DbContext.Categories
             .Where(el => el.StudentStoreId == request.StudentStoreId)
-            .Select(el=>new CategoryDTO
-            {
-                Id = el.Id,
-                Name = el.Name
-            })
+            .Select(el=> el.Adapt<CategoryDTO>())
             .ToList();
 
         return Task.FromResult(new GetCategoriesCommandResult(categories));

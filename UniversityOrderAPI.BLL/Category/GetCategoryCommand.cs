@@ -1,3 +1,4 @@
+using Mapster;
 using UniversityOrderAPI.BLL.Command;
 using UniversityOrderAPI.DAL;
 
@@ -25,10 +26,7 @@ public class GetCategoryCommandHandler : Command<UniversityOrderAPIDbContext>,
         if (category == null)
             throw new Exception("Category not found");
         
-        return Task.FromResult(new GetCategoryCommandResult(new CategoryDTO
-        {
-            Id = category.Id,
-            Name = category.Name
-        }));
+        return Task.FromResult(new GetCategoryCommandResult(
+            category.Adapt<CategoryDTO>()));
     }
 }

@@ -1,4 +1,5 @@
-﻿using UniversityOrderAPI.BLL.Command;
+﻿using Mapster;
+using UniversityOrderAPI.BLL.Command;
 using UniversityOrderAPI.DAL;
 
 namespace UniversityOrderAPI.BLL.Client;
@@ -37,14 +38,6 @@ public class EditClientCommandHandler : Command<UniversityOrderAPIDbContext>,
         DbContext.SaveChanges();
 
         return Task.FromResult(new EditClientCommandResult(
-            new ClientDTO
-            {
-                Id = client.Id,
-                Sex = client.Sex,
-                FirstName = client.FirstName,
-                LastName = client.LastName,
-                Email = client.Email,
-                PhoneNumber = client.PhoneNumber
-            }));
+            client.Adapt<ClientDTO>()));
     }
 }

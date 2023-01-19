@@ -1,4 +1,5 @@
-﻿using UniversityOrderAPI.BLL.Command;
+﻿using Mapster;
+using UniversityOrderAPI.BLL.Command;
 using UniversityOrderAPI.DAL;
 
 namespace UniversityOrderAPI.BLL.Client;
@@ -29,7 +30,7 @@ public class CreateClientCommandHandler : Command<UniversityOrderAPIDbContext>,
             FirstName = request.Client.FirstName,
             LastName = request.Client.LastName,
             Email = request.Client.Email,
-            PhoneNumber = request.Client.FirstName
+            PhoneNumber = request.Client.PhoneNumber
         };
 
         DbContext.Clients.Add(newClient);
@@ -37,14 +38,6 @@ public class CreateClientCommandHandler : Command<UniversityOrderAPIDbContext>,
         DbContext.SaveChanges();
 
         return Task.FromResult(new CreateClientCommandResult(
-            new ClientDTO
-            {
-                Id = newClient.Id,
-                Sex = newClient.Sex,
-                FirstName = newClient.FirstName,
-                LastName = newClient.LastName,
-                Email = newClient.Email,
-                PhoneNumber = newClient.FirstName
-            }));
+            newClient.Adapt<ClientDTO>()));
     }
 }
