@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Mapster;
+using Microsoft.EntityFrameworkCore;
 using UniversityOrderAPI.BLL.Command;
 using UniversityOrderAPI.DAL;
 
@@ -49,14 +50,7 @@ public class EditProductCommandHandler : Command<UniversityOrderAPIDbContext>,
 
         DbContext.SaveChanges();
 
-        return Task.FromResult(new EditProductCommandResult(new ProductDTO
-        {
-            Id = product.Id,
-            Name = product.Name,
-            Description = product.Description,
-            Cost = product.Cost,
-            CategoryId = product.CategoryId,
-            ManufacturerId = product.ManufacturerId,
-        }));
+        return Task.FromResult(new EditProductCommandResult(
+            product.Adapt<ProductDTO>()));
     }
 }

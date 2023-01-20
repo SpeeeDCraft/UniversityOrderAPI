@@ -1,3 +1,4 @@
+using Mapster;
 using UniversityOrderAPI.BLL.Command;
 using UniversityOrderAPI.DAL;
 
@@ -34,10 +35,7 @@ public record CreateCategoryCommandResult(
 
         DbContext.SaveChanges();
 
-        return Task.FromResult(new CreateCategoryCommandResult(new CategoryDTO
-        {
-            Id = newCategory.Id,
-            Name = newCategory.Name
-        }));
+        return Task.FromResult(new CreateCategoryCommandResult(
+            newCategory.Adapt<CategoryDTO>()));
     }
 }

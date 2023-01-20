@@ -1,4 +1,5 @@
-﻿using UniversityOrderAPI.BLL.Command;
+﻿using Mapster;
+using UniversityOrderAPI.BLL.Command;
 using UniversityOrderAPI.DAL;
 
 namespace UniversityOrderAPI.BLL.Manufacturer;
@@ -35,13 +36,7 @@ public class CreateManufacturerCommandHandler : Command<UniversityOrderAPIDbCont
         DbContext.SaveChanges();
 
         return Task.FromResult(new CreateManufacturerCommandResult(
-            new ManufacturerDTO
-            {
-                Id = newManufacturer.Id,
-                Name = newManufacturer.Name,
-                City = newManufacturer.City,
-                Country = newManufacturer.Country
-            }
+            newManufacturer.Adapt<ManufacturerDTO>()
         ));
     }
 }

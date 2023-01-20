@@ -1,3 +1,4 @@
+using Mapster;
 using UniversityOrderAPI.BLL.Command;
 using UniversityOrderAPI.DAL;
 
@@ -34,10 +35,7 @@ public class EditCategoryCommandHandler : Command<UniversityOrderAPIDbContext>,
 
         DbContext.SaveChanges();
     
-        return Task.FromResult(new EditCategoryCommandResult(new CategoryDTO
-        {
-            Id = category.Id,
-            Name = category.Name
-        }));
+        return Task.FromResult(new EditCategoryCommandResult(
+            category.Adapt<CategoryDTO>()));
     }
 }

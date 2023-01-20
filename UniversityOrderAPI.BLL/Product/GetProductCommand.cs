@@ -1,4 +1,5 @@
-﻿using UniversityOrderAPI.BLL.Command;
+﻿using Mapster;
+using UniversityOrderAPI.BLL.Command;
 using UniversityOrderAPI.DAL;
 
 namespace UniversityOrderAPI.BLL.Product;
@@ -26,14 +27,7 @@ public class GetProductCommandHandler : Command<UniversityOrderAPIDbContext>,
         if (product == null)
             throw new Exception("Product not found");
 
-        return Task.FromResult(new GetProductCommandResult(new ProductDTO
-        {
-            Id = product.Id,
-            Name = product.Name,
-            Description = product.Description,
-            Cost = product.Cost,
-            CategoryId = product.CategoryId,
-            ManufacturerId = product.ManufacturerId
-        }));
+        return Task.FromResult(new GetProductCommandResult(
+            product.Adapt<ProductDTO>()));
     }
 }

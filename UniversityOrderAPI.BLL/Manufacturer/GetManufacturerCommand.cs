@@ -1,4 +1,5 @@
-﻿using UniversityOrderAPI.BLL.Command;
+﻿using Mapster;
+using UniversityOrderAPI.BLL.Command;
 using UniversityOrderAPI.DAL;
 
 namespace UniversityOrderAPI.BLL.Manufacturer;
@@ -24,12 +25,7 @@ public class GetManufacturerCommandHandler : Command<UniversityOrderAPIDbContext
         if (manufacturer == null)
             throw new Exception("Manufacturer not found");
         
-        return Task.FromResult(new GetManufacturerCommandResult(new ManufacturerDTO
-        {
-            Id = manufacturer.Id,
-            Name = manufacturer.Name,
-            City = manufacturer.City,
-            Country = manufacturer.Country
-        }));
+        return Task.FromResult(new GetManufacturerCommandResult(
+            manufacturer.Adapt<ManufacturerDTO>()));
     }
 }
