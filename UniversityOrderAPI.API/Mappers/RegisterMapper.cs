@@ -2,11 +2,13 @@
 using UniversityOrderAPI.BLL.Category;
 using UniversityOrderAPI.BLL.Client;
 using UniversityOrderAPI.BLL.Manufacturer;
+using UniversityOrderAPI.BLL.Order;
 using UniversityOrderAPI.BLL.Product;
 using UniversityOrderAPI.DAL.Models;
 using UniversityOrderAPI.Models.Category;
 using UniversityOrderAPI.Models.Client;
 using UniversityOrderAPI.Models.Manufacturer;
+using UniversityOrderAPI.Models.Order;
 using UniversityOrderAPI.Models.Product;
 
 namespace UniversityOrderAPI.Mappers;
@@ -26,7 +28,8 @@ public class RegisterMapper : IRegister
         
         config.NewConfig<Client, ClientDTO>().RequireDestinationMemberSource(true);
         config.NewConfig<ClientDTO, ClientAPIDTO>().RequireDestinationMemberSource(true);
-        
-        // Order ?
+
+        config.NewConfig<Order, OrderDTO>().RequireDestinationMemberSource(true);
+        config.NewConfig<OrderDTO, OrderAPIDTO>().RequireDestinationMemberSource(true);
     }
 }
