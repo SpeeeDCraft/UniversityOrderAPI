@@ -76,7 +76,7 @@ public class OrderController : BaseApiController
     }
 
     [HttpDelete("{id:int}")]
-    public Task DeleteClient(int id)
+    public Task DeleteOrder(int id)
     {
         ICommandHandler<DeleteOrderCommand> commandHandler = new DeleteOrderCommandHandler(Db);
         
