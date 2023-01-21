@@ -1,4 +1,5 @@
 ﻿using UniversityOrderAPI.DAL.Models;
+using UniversityOrderAPI.Models.OrderItem;
 
 namespace UniversityOrderAPI.Models.Order;
 
@@ -12,5 +13,5 @@ public class OrderAPIDTO
     
     public OrderStatus Status { get; set; }
 
-    public List<OrderItem> Items { get; set; }
+    public List<OrderItemAPIDTO> Items { get; set; }
 }

@@ -15,13 +15,13 @@ public class DeleteOrderCommandHandler : Command<UniversityOrderAPIDbContext>,
 
     public Task Handle(DeleteOrderCommand request, CancellationToken? cancellationToken)
     {
-        var order = DbContext.Orders.SingleOrDefault(el =>
+        var order = DbContext.Order.SingleOrDefault(el =>
             el.StudentStoreId == request.StudentStoreId && el.Id == request.OrderId);
 
         if (order is null)
             throw new Exception("Order not found");
 
-        DbContext.Orders.Remove(order);
+        DbContext.Order.Remove(order);
 
         DbContext.SaveChanges();
 

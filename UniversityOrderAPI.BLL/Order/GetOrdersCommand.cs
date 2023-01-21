@@ -1,4 +1,5 @@
 ﻿using Mapster;
+using Microsoft.EntityFrameworkCore;
 using UniversityOrderAPI.BLL.Command;
 using UniversityOrderAPI.DAL;
 
@@ -19,8 +20,9 @@ public class GetOrdersCommandHandler : Command<UniversityOrderAPIDbContext>,
 
     public Task<GetOrdersCommandResult> Handle(GetOrdersCommand request, CancellationToken? cancellationToken)
     {
-        var orders = DbContext.Orders
+        var orders = DbContext.Order
             .Where(el => el.StudentStoreId == request.StudentStoreId)
+            .Include(el => el.Items)
             .Select(el => el.Adapt<OrderDTO>())
             .ToList();
 

@@ -20,7 +20,7 @@ public class EditOrderCommandHandler : Command<UniversityOrderAPIDbContext>,
 
     public Task<EditOrderCommandResult> Handle(EditOrderCommand request, CancellationToken? cancellationToken)
     {
-        var order = DbContext.Orders.SingleOrDefault(el => 
+        var order = DbContext.Order.SingleOrDefault(el => 
             el.StudentStoreId == request.StudentStoreId && el.Id == request.Order.Id);
 
         if (order is null)
@@ -29,7 +29,7 @@ public class EditOrderCommandHandler : Command<UniversityOrderAPIDbContext>,
         order.ClientId = request.Order.ClientId;
         order.OrderCost = request.Order.OrderCost;
         order.Status = request.Order.Status;
-        order.Items = request.Order.Items;
+        order.Items = request.Order.Items.Select(el => el.Adapt<DAL.Models.OrderItem>()).ToList();
 
         DbContext.SaveChanges();
 
