@@ -19,7 +19,7 @@ public class DeleteOrderCommandHandler : Command<UniversityOrderAPIDbContext>,
             el.StudentStoreId == request.StudentStoreId && el.Id == request.OrderId);
 
         if (order is null)
-            throw new Exception("Order not found");
+            throw new Exception($"Order with id: {request.OrderId} not found");
 
         DbContext.Order.Remove(order);
 

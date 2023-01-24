@@ -29,7 +29,7 @@ public class EditCategoryCommandHandler : Command<UniversityOrderAPIDbContext>,
                                    && el.StudentStoreId == request.StudentStoreId);
 
         if (category == null)
-            throw new Exception("Category not found");
+            throw new Exception($"Category with id: {request.Category.Id} not found");
 
         category.Name = request.Category.Name;
 

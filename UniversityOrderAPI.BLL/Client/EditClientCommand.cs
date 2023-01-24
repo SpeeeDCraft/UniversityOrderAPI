@@ -27,7 +27,7 @@ public class EditClientCommandHandler : Command<UniversityOrderAPIDbContext>,
             el.StudentStoreId == request.StudentStoreId && el.Id == request.Client.Id);
 
         if (client is null)
-            throw new Exception("Client not found");
+            throw new Exception($"Client with id: {request.Client.Id} not found");
 
         client.Sex = request.Client.Sex;
         client.FirstName = request.Client.FirstName;

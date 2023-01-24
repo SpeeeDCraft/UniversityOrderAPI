@@ -18,7 +18,7 @@ public class DeleteCategoryCommandHandler : Command<UniversityOrderAPIDbContext>
                                    && el.StudentStoreId == request.StudentStoreId);
 
         if (category == null)
-            throw new Exception("Category not found");
+            throw new Exception($"Category with id: {request.CategoryId} not found");
 
         DbContext.Categories.Remove(category);
 

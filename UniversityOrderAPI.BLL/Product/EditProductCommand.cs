@@ -34,13 +34,13 @@ public class EditProductCommandHandler : Command<UniversityOrderAPIDbContext>,
         );
 
         if (product == null)
-            throw new Exception("Product not found");
+            throw new Exception($"Product with id: {request.Product.Id} not found");
 
         if (!DbContext.Categories.Any(el => el.Id == request.Product.CategoryId))
-            throw new Exception("CategoryId not found");
+            throw new Exception($"CategoryId with id: {request.Product.CategoryId} not found");
     
         if (!DbContext.Manufacturers.Any(el => el.Id == request.Product.ManufacturerId))
-            throw new Exception("ManufacturerId not found");
+            throw new Exception($"ManufacturerId with id: {request.Product.ManufacturerId} not found");
         
         product.Name = request.Product.Name;
         product.Description = request.Product.Description;

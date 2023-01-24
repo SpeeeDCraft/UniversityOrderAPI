@@ -27,7 +27,7 @@ public class GetOrderCommandHandler : Command<UniversityOrderAPIDbContext>,
             .SingleOrDefault();
 
         if (order is null)
-            throw new Exception("Order not found");
+            throw new Exception($"Order with id {request.OrderId} not found");
 
         return Task.FromResult(new GetOrderCommandResult(
             order.Adapt<OrderDTO>()));

@@ -19,7 +19,7 @@ public class DeleteClientCommandHandler : Command<UniversityOrderAPIDbContext>,
             el.StudentStoreId == request.StudentStoreId && el.Id == request.ClientId && el.IsDeleted == false);
 
         if (client == null)
-            throw new Exception("Client not found");
+            throw new Exception($"Client with id: {request.ClientId} not found");
 
         client.IsDeleted = true;
 

@@ -19,7 +19,7 @@ public class DeleteManufacturerCommandHandler : Command<UniversityOrderAPIDbCont
             el => el.Id == request.ManufactureId && el.StudentStoreId == request.StudentStoreId);
 
         if (manufacturer == null)
-            throw new Exception("Manufacturer not found");
+            throw new Exception($"Manufacturer with id: {request.ManufactureId} not found");
 
         DbContext.Manufacturers.Remove(manufacturer);
 

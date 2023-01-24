@@ -23,7 +23,7 @@ public class GetManufacturerCommandHandler : Command<UniversityOrderAPIDbContext
             el.StudentStoreId == request.StudentStoreId && el.Id == request.ManufacturerId);
 
         if (manufacturer == null)
-            throw new Exception("Manufacturer not found");
+            throw new Exception($"Manufacturer with id: {request.ManufacturerId} not found");
         
         return Task.FromResult(new GetManufacturerCommandResult(
             manufacturer.Adapt<ManufacturerDTO>()));
