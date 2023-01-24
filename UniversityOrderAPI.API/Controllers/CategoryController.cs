@@ -18,7 +18,6 @@ public class CategoryController : BaseApiController
     [HttpGet("{id:int}")]
     public async Task<GetCategoryResponse> GetCategory(int id)
     {
-
         ICommandHandler<GetCategoryCommand, GetCategoryCommandResult>
             commandHandler = new GetCategoryCommandHandler(Db);
         
