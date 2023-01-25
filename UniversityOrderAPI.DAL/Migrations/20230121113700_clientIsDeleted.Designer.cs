@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using UniversityOrderAPI.DAL;
@@ -11,9 +12,11 @@ using UniversityOrderAPI.DAL;
 namespace UniversityOrderAPI.DAL.Migrations
 {
     [DbContext(typeof(UniversityOrderAPIDbContext))]
-    partial class UniversityOrderAPIDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230121113700_clientIsDeleted")]
+    partial class clientIsDeleted
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

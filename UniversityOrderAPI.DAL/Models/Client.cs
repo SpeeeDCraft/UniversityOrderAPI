@@ -39,4 +39,9 @@ public class Client: BaseStudentStoreModel
     /// Номер телефона
     /// </summary>
     public string? PhoneNumber { get; set; }
+
+    /// <summary>
+    /// Удален ли клиент
+    /// </summary>
+    public bool? IsDeleted { get; set; }
 }

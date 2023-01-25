@@ -21,10 +21,10 @@ public class GetClientCommandHandler : Command<UniversityOrderAPIDbContext>,
     public Task<GetClientCommandResult> Handle(GetClientCommand request, CancellationToken? cancellationToken)
     {
         var client = DbContext.Clients.SingleOrDefault(el =>
-            el.StudentStoreId == request.StudentStoreId && el.Id == request.ClientId);
+            el.StudentStoreId == request.StudentStoreId && el.Id == request.ClientId && el.IsDeleted == false);
 
         if (client is null)
-            throw new Exception("Client not found");
+            throw new Exception($"Client with id: {request.ClientId} not found");
 
         return Task.FromResult(
             new GetClientCommandResult(

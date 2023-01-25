@@ -20,7 +20,6 @@ public enum OrderStatus
     PurchaseCreated
 }
 
-
 /// <summary>
 /// Заказ
 /// </summary>

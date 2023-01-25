@@ -27,11 +27,11 @@ public class LoginStudentCommandHandler : Command<UniversityOrderAPIDbContext>, 
     public async Task<LoginStudentCommandResult> Handle(LoginStudentCommand request, CancellationToken? cancellationToken)
     {
         var student = await DbContext.Students
-            .Include(el=>el.StudentStore)
+            .Include(el => el.StudentStore)
             .SingleOrDefaultAsync(el => el.Identifier == request.Identifier);
 
         if (student == null)
-            throw new Exception("Student not found");
+            throw new Exception($"Student with id: {request.Identifier} not found");
         
         if (student.StudentStore == null)
             throw new Exception("Student not linked to any store");

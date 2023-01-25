@@ -28,7 +28,7 @@ public class EditManufacturerCommandHandler : Command<UniversityOrderAPIDbContex
                                    &&  el.StudentStoreId == request.StudentStoreId);
 
         if (manufacturer == null)
-            throw new Exception("Manufacturer not found");
+            throw new Exception($"Manufacturer with id: {request.Manufacturer.Id} not found");
         
         manufacturer.Name = request.Manufacturer.Name;
         manufacturer.City = request.Manufacturer.City;

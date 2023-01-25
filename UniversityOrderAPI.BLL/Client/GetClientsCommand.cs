@@ -20,7 +20,7 @@ public class GetClientsCommandHandler : Command<UniversityOrderAPIDbContext>,
     public Task<GetClientsCommandResult> Handle(GetClientsCommand request, CancellationToken? cancellationToken)
     {
         var clients = DbContext.Clients
-            .Where(el => el.StudentStoreId == request.StudentStoreId)
+            .Where(el => el.StudentStoreId == request.StudentStoreId && el.IsDeleted == false)
             .Select(el => el.Adapt<ClientDTO>())
             .ToList();
 

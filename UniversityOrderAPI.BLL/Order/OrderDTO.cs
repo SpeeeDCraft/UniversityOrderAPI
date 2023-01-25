@@ -1,4 +1,5 @@
 ﻿using UniversityOrderAPI.BLL.Client;
+using UniversityOrderAPI.BLL.OrderItem;
 using UniversityOrderAPI.DAL.Models;
 
 namespace UniversityOrderAPI.BLL.Order;
@@ -15,6 +16,6 @@ public class OrderDTO
     
     public ClientDTO Client { get; set; }
     
-    public List<OrderItem> Items { get; set; }
+    public List<OrderItemDTO> Items { get; set; }
     
 }

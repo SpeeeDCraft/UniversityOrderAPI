@@ -25,7 +25,7 @@ public class GetProductCommandHandler : Command<UniversityOrderAPIDbContext>,
             el => el.Id == request.ProductId && el.StudentStoreId == request.StudentStoreId);
 
         if (product == null)
-            throw new Exception("Product not found");
+            throw new Exception($"Product with id: {request.ProductId} not found");
 
         return Task.FromResult(new GetProductCommandResult(
             product.Adapt<ProductDTO>()));

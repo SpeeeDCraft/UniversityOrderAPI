@@ -24,7 +24,7 @@ public class GetCategoryCommandHandler : Command<UniversityOrderAPIDbContext>,
             el.StudentStoreId == request.StudentStoreId && el.Id == request.CategoryId);
 
         if (category == null)
-            throw new Exception("Category not found");
+            throw new Exception($"Category with id: {request.CategoryId} not found");
         
         return Task.FromResult(new GetCategoryCommandResult(
             category.Adapt<CategoryDTO>()));

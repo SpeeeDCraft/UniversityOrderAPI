@@ -26,10 +26,10 @@ public class CreateOrderCommandHandler : Command<UniversityOrderAPIDbContext>,
             ClientId = request.Order.ClientId,
             OrderCost = request.Order.OrderCost,
             Status = request.Order.Status,
-            Items = request.Order.Items
+            Items = request.Order.Items.Select(el => el.Adapt<DAL.Models.OrderItem>()).ToList()
         };
 
-        DbContext.Orders.Add(newOrder);
+        DbContext.Order.Add(newOrder);
 
         DbContext.SaveChanges();
 

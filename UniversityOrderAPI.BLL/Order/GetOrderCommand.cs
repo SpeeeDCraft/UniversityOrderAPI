@@ -1,4 +1,5 @@
 ﻿using Mapster;
+using Microsoft.EntityFrameworkCore;
 using UniversityOrderAPI.BLL.Command;
 using UniversityOrderAPI.DAL;
 
@@ -20,11 +21,13 @@ public class GetOrderCommandHandler : Command<UniversityOrderAPIDbContext>,
 
     public Task<GetOrderCommandResult> Handle(GetOrderCommand request, CancellationToken? cancellationToken)
     {
-        var order = DbContext.Orders.SingleOrDefault(el => 
-            el.StudentStoreId == request.StudentStoreId && el.Id == request.OrderId);
+        var order = DbContext.Order.Where(el =>
+                el.StudentStoreId == request.StudentStoreId && el.Id == request.OrderId)
+            .Include(el => el.Items)
+            .SingleOrDefault();
 
         if (order is null)
-            throw new Exception("Order not found");
+            throw new Exception($"Order with id {request.OrderId} not found");
 
         return Task.FromResult(new GetOrderCommandResult(
             order.Adapt<OrderDTO>()));
