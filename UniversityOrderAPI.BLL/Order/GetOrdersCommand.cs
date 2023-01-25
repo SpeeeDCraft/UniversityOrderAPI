@@ -22,6 +22,7 @@ public class GetOrdersCommandHandler : Command<UniversityOrderAPIDbContext>,
     {
         var orders = DbContext.Order
             .Where(el => el.StudentStoreId == request.StudentStoreId)
+            .Include(el => el.Client)
             .Include(el => el.Items)
             .Select(el => el.Adapt<OrderDTO>())
             .ToList();

@@ -17,32 +17,42 @@ using UniversityOrderAPI.Models.Purchase;
 
 namespace UniversityOrderAPI.Mappers;
 
-public class RegisterMapper : IRegister
+public static class RegisterMapper
 {
-    public void Register(TypeAdapterConfig config)
+    public static void RegisterMapsterConfiguration(this IServiceCollection services)
     {
-        config.NewConfig<Category, CategoryDTO>().RequireDestinationMemberSource(true);
-        config.NewConfig<CategoryDTO, CategoryAPIDTO>().RequireDestinationMemberSource(true);
-        
-        config.NewConfig<Manufacturer, ManufacturerDTO>().RequireDestinationMemberSource(true);
-        config.NewConfig<ManufacturerDTO, ManufacturerAPIDTO>().RequireDestinationMemberSource(true);
-        
-        config.NewConfig<Product, ProductDTO>()
-            .Map(e => e.CategoryName, e => e.Category.Name)
-            .Map(e => e.ManufacturerName, e => e.Manufacturer.Name)
-            .RequireDestinationMemberSource(true);
-        config.NewConfig<ProductDTO, ProductAPIDTO>().RequireDestinationMemberSource(true);
-        
-        config.NewConfig<Client, ClientDTO>().RequireDestinationMemberSource(true);
-        config.NewConfig<ClientDTO, ClientAPIDTO>().RequireDestinationMemberSource(true);
+        // Category
+        TypeAdapterConfig<Category, CategoryDTO>.NewConfig();
+        TypeAdapterConfig<CategoryDTO, CategoryAPIDTO>.NewConfig();
 
-        config.NewConfig<Order, OrderDTO>().RequireDestinationMemberSource(true);
-        config.NewConfig<OrderDTO, OrderAPIDTO>().RequireDestinationMemberSource(true);
+        // Manufacturer
+        TypeAdapterConfig<Manufacturer, ManufacturerDTO>.NewConfig();
+        TypeAdapterConfig<ManufacturerDTO, ManufacturerAPIDTO>.NewConfig();
+        
+        // Product
+        TypeAdapterConfig<Product, ProductDTO>
+            .NewConfig()
+            .Map(productDTO => productDTO.CategoryName, product => product.Category.Name)
+            .Map(productDTO => productDTO.ManufacturerName, product => product.Manufacturer.Name);
+        TypeAdapterConfig<ProductDTO, ProductAPIDTO>.NewConfig();
 
-        config.NewConfig<OrderItem, OrderItemDTO>().RequireDestinationMemberSource(true);
-        config.NewConfig<OrderItemDTO, OrderItemAPIDTO>().RequireDestinationMemberSource(true);
+        // Client
+        TypeAdapterConfig<Client, ClientDTO>.NewConfig();
+        TypeAdapterConfig<ClientDTO, ClientAPIDTO>.NewConfig();
 
-        config.NewConfig<Purchase, PurchaseDTO>().RequireDestinationMemberSource(true);
-        config.NewConfig<PurchaseDTO, PurchaseAPIDTO>().RequireDestinationMemberSource(true);
+        // Order
+        TypeAdapterConfig<Order, OrderDTO>
+            .NewConfig()
+            .Map(orderDTO => orderDTO.ClientFIO, order => $"{order.Client.LastName} {order.Client.FirstName}");
+        TypeAdapterConfig<OrderDTO, OrderAPIDTO>.NewConfig();
+
+        // OrderItem
+        TypeAdapterConfig<OrderItem, OrderItemDTO>.NewConfig();
+        TypeAdapterConfig<OrderItemDTO, OrderItemAPIDTO>.NewConfig();
+
+        // Purchase
+        TypeAdapterConfig<Purchase, PurchaseDTO>.NewConfig();
+        TypeAdapterConfig<PurchaseDTO, PurchaseAPIDTO>.NewConfig();
+
     }
 }

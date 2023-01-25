@@ -32,4 +32,6 @@ public class OrderAPIDTO
     public OrderStatusAPIDTO Status { get; set; }
 
     public List<OrderItemAPIDTO> Items { get; set; }
+    
+    public string ClientFIO { get; set; }
 }

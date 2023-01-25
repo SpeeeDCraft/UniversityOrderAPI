@@ -30,12 +30,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         options.TokenValidationParameters = new UniversityApiTokenValidationParameters();
     });
 
-builder.Services.AddSingleton(() =>
-{
-    var config = new TypeAdapterConfig();
-    new RegisterMapper().Register(config);
-    return config;
-});
+builder.Services.RegisterMapsterConfiguration();
 
 var app = builder.Build();
 

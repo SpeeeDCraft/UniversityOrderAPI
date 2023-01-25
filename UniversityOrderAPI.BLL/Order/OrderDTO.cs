@@ -35,5 +35,7 @@ public class OrderDTO
     public ClientDTO Client { get; set; }
     
     public List<OrderItemDTO> Items { get; set; }
-    
+
+    public string ClientFIO { get; set; }
+
 }

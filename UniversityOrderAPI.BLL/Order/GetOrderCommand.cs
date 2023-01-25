@@ -23,6 +23,7 @@ public class GetOrderCommandHandler : Command<UniversityOrderAPIDbContext>,
     {
         var order = DbContext.Order.Where(el =>
                 el.StudentStoreId == request.StudentStoreId && el.Id == request.OrderId)
+            .Include(el => el.Client)
             .Include(el => el.Items)
             .SingleOrDefault();
 
