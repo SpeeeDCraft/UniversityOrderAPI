@@ -18,5 +18,6 @@ public class ProductDTO
     public string Description { get; set; }
     
     public CategoryDTO Category { get; set; }
+    
     public ManufacturerDTO Manufacturer { get; set; }
 }

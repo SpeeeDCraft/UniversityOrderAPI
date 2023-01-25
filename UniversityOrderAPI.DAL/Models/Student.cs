@@ -39,7 +39,6 @@ public class Student: BaseDBModel
     /// Дата последней активности
     /// </summary>
     public DateTime? LastActivityDate { get; set; }
-
-
+    
     public StudentStore StudentStore { get; set; }
 }

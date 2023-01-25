@@ -51,7 +51,7 @@ public class CreateProductCommandHandler : Command<UniversityOrderAPIDbContext>,
 
         DbContext.Products.Add(newProduct);
 
-        await DbContext.SaveChangesAsync();
+        DbContext.SaveChanges();
 
         return new CreateProductCommandResult(
             newProduct.Adapt<ProductDTO>()
