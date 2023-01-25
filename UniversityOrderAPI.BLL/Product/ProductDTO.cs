@@ -20,4 +20,8 @@ public class ProductDTO
     public CategoryDTO Category { get; set; }
     
     public ManufacturerDTO Manufacturer { get; set; }
+
+    public string CategoryName { get; set; }
+
+    public string ManufacturerName { get; set; }
 }

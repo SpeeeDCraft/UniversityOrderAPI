@@ -1,4 +1,5 @@
 ﻿using Mapster;
+using Microsoft.EntityFrameworkCore;
 using UniversityOrderAPI.BLL.Command;
 using UniversityOrderAPI.DAL;
 
@@ -21,6 +22,8 @@ public class GetProductCommandHandler : Command<UniversityOrderAPIDbContext>,
     public Task<GetProductCommandResult> Handle(GetProductCommand request, CancellationToken? cancellationToken)
     {
         var product = DbContext.Products
+            .Include(el => el.Category)
+            .Include(el => el.Manufacturer)
             .SingleOrDefault(
             el => el.Id == request.ProductId && el.StudentStoreId == request.StudentStoreId);
 

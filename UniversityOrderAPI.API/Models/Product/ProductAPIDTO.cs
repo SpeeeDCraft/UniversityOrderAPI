@@ -13,4 +13,8 @@ public class ProductAPIDTO
     public int Cost { get; set; }
 
     public string Description { get; set; }
+
+    public string CategoryName { get; set; }
+    
+    public string ManufacturerName { get; set; }
 }

@@ -27,7 +27,10 @@ public class RegisterMapper : IRegister
         config.NewConfig<Manufacturer, ManufacturerDTO>().RequireDestinationMemberSource(true);
         config.NewConfig<ManufacturerDTO, ManufacturerAPIDTO>().RequireDestinationMemberSource(true);
         
-        config.NewConfig<Product, ProductDTO>().RequireDestinationMemberSource(true);
+        config.NewConfig<Product, ProductDTO>()
+            .Map(e => e.CategoryName, e => e.Category.Name)
+            .Map(e => e.ManufacturerName, e => e.Manufacturer.Name)
+            .RequireDestinationMemberSource(true);
         config.NewConfig<ProductDTO, ProductAPIDTO>().RequireDestinationMemberSource(true);
         
         config.NewConfig<Client, ClientDTO>().RequireDestinationMemberSource(true);
