@@ -1,6 +1,7 @@
 ﻿using Mapster;
 using UniversityOrderAPI.BLL.Command;
 using UniversityOrderAPI.DAL;
+using UniversityOrderAPI.DAL.Models;
 
 namespace UniversityOrderAPI.BLL.Order;
 
@@ -25,7 +26,7 @@ public class CreateOrderCommandHandler : Command<UniversityOrderAPIDbContext>,
             StudentStoreId = request.StudentStoreId,
             ClientId = request.Order.ClientId,
             OrderCost = request.Order.OrderCost,
-            Status = request.Order.Status,
+            Status = (OrderStatus) request.Order.Status,
             Items = request.Order.Items.Select(el => el.Adapt<DAL.Models.OrderItem>()).ToList()
         };
 
