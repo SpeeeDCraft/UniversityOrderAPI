@@ -31,7 +31,7 @@ public class UserController : BaseApiController
         var claims = new List<Claim>
         {
             new("StudentStoreId", response.student.StudentStoreId.ToString()),
-            new("StudentId", response.student.StudentId.ToString()),
+            new("StudentId", response.student.StudentId.ToString())
         };
 
         var jwt = new JwtSecurityToken(

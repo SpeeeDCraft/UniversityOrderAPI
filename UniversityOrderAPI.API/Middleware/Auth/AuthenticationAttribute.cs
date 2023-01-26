@@ -1,8 +1,6 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.IdentityModel.Tokens;
-
 namespace UniversityOrderAPI.Middleware.Auth;
 
 public class AuthenticationAttribute : ActionFilterAttribute

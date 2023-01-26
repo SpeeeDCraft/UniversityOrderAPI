@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using UniversityOrderAPI.DAL;
 using UniversityOrderAPI.Mappers;
+using UniversityOrderAPI.Middleware;
 using UniversityOrderAPI.Middleware.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -40,6 +41,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseExceptionHandlerMiddleware();
 
 app.UseHttpsRedirection();
 
