@@ -22,6 +22,8 @@ public class GetProductsCommandHandler : Command<UniversityOrderAPIDbContext>,
     {
         var products = DbContext.Products
             .Where(el => el.StudentStoreId == request.StudentStoreId)
+            .Include(el => el.Category)
+            .Include(el => el.Manufacturer)
             .Select(el => el.Adapt<ProductDTO>())
             .ToList();
 

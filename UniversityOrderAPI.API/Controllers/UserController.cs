@@ -14,14 +14,11 @@ namespace UniversityOrderAPI.Controllers;
 [Route("[controller]")]
 public class UserController : BaseApiController
 {
-    public UserController(UniversityOrderAPIDbContext db) : base(db)
-    {
-    }
+    public UserController(UniversityOrderAPIDbContext db) : base(db) { }
 
     [HttpPost("login")]
     public async Task<LoginResponse> Login([FromBody] LoginRequest request)
     {
-        
         ICommandHandler<LoginStudentCommand, LoginStudentCommandResult> commandHandler =
             new LoginStudentCommandHandler(Db);
 
@@ -31,7 +28,7 @@ public class UserController : BaseApiController
         var claims = new List<Claim>
         {
             new("StudentStoreId", response.student.StudentStoreId.ToString()),
-            new("StudentId", response.student.StudentId.ToString()),
+            new("StudentId", response.student.StudentId.ToString())
         };
 
         var jwt = new JwtSecurityToken(

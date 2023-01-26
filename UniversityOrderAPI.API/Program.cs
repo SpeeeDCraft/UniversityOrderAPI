@@ -1,11 +1,8 @@
-using System.Linq.Expressions;
-using Mapster;
-using MapsterMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using UniversityOrderAPI.DAL;
 using UniversityOrderAPI.Mappers;
+using UniversityOrderAPI.Middleware;
 using UniversityOrderAPI.Middleware.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -30,12 +27,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         options.TokenValidationParameters = new UniversityApiTokenValidationParameters();
     });
 
-builder.Services.AddSingleton(() =>
-{
-    var config = new TypeAdapterConfig();
-    new RegisterMapper().Register(config);
-    return config;
-});
+builder.Services.RegisterMapsterConfiguration();
 
 var app = builder.Build();
 
@@ -45,6 +37,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseExceptionHandlerMiddleware();
 
 app.UseHttpsRedirection();
 

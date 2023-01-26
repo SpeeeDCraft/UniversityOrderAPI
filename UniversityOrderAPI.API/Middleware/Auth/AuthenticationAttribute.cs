@@ -1,13 +1,12 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.IdentityModel.Tokens;
+using UniversityOrderAPI.DAL;
 
 namespace UniversityOrderAPI.Middleware.Auth;
 
 public class AuthenticationAttribute : ActionFilterAttribute
 {
-    
     public override void OnActionExecuting(ActionExecutingContext context)
     {
         string authToken = context.HttpContext.Request.Headers["Authorization"]!;
@@ -22,7 +21,7 @@ public class AuthenticationAttribute : ActionFilterAttribute
         }
 
         var token = authToken.Replace("Bearer ", string.Empty);
-
+        
         try
         {
             new JwtSecurityTokenHandler().ValidateToken(
@@ -30,6 +29,17 @@ public class AuthenticationAttribute : ActionFilterAttribute
                 new UniversityApiTokenValidationParameters(),
                 out var tokenInfo
                 );
+            
+            var studentId = context.HttpContext.User.Claims.Single(el => el.Type == "StudentId").Value;
+
+            var dbContext = context.HttpContext
+                .RequestServices
+                .GetService(typeof(UniversityOrderAPIDbContext)) as UniversityOrderAPIDbContext;
+
+            var student = dbContext!.Students.Single(el => el.Id.ToString() == studentId);
+
+            student.LastActivityDate = DateTime.UtcNow;
+            dbContext.SaveChanges();
         }
         catch(Exception ex)
         {
