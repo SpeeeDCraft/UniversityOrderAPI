@@ -29,7 +29,7 @@ public class ExceptionMiddleware
         };
 
         context.Response.ContentType = "application/json";
-        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+        context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
         return context.Response.WriteAsync(Newtonsoft.Json.JsonConvert.SerializeObject(result));
     }
 }
