@@ -33,4 +33,8 @@
       <ProjectReference Include="..\UniversityOrderAPI.DAL\UniversityOrderAPI.DAL.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Include="config.json" />
+    </ItemGroup>
+
 </Project>

@@ -22,6 +22,14 @@ public record CreateCategoryCommandResult(
     public Task<CreateCategoryCommandResult> Handle(CreateCategoryCommand request,
         CancellationToken? cancellationToken)
     {
+        var maxAllowedCountOfCategories = ConfigHelper.GetMaxNPerUser(request);
+
+        var countOfCategoriesPerStudentStore = DbContext.Categories
+            .Count(el => el.StudentStoreId == request.StudentStoreId);
+
+        if (countOfCategoriesPerStudentStore >= maxAllowedCountOfCategories)
+            throw new Exception($"Max amount of categories per student store was exceeded, allowed: {maxAllowedCountOfCategories}");
+        
         if (string.IsNullOrEmpty(request.Category.Name))
             throw new Exception("Category name null or empty");
 
