@@ -22,7 +22,7 @@ public class CreateOrderCommandHandler : Command<UniversityOrderAPIDbContext>,
     
     public Task<CreateOrderCommandResult> Handle(CreateOrderCommand request, CancellationToken? cancellationToken)
     {
-        var maxAllowedCountOfOrders = ConfigHelper.GetMaxNPerUser(request);
+        var maxAllowedCountOfOrders = 20;
 
         var countOfOrdersPerStudentStore = DbContext.Order
             .Count(el => el.StudentStoreId == request.StudentStoreId);

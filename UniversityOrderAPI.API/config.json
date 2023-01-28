@@ -1,9 +1,0 @@
-﻿{
-  "max_categories_per_user" : 20,
-  "max_clients_per_user" : 20,
-  "max_manufacturers_per_user" : 20,
-  "max_order_items_per_user" : 20,
-  "max_orders_per_user" : 20,
-  "max_products_per_user" : 20,
-  "max_purchases_per_user" : 20
-}

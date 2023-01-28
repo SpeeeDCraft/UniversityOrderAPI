@@ -22,7 +22,7 @@ public record CreateCategoryCommandResult(
     public Task<CreateCategoryCommandResult> Handle(CreateCategoryCommand request,
         CancellationToken? cancellationToken)
     {
-        var maxAllowedCountOfCategories = ConfigHelper.GetMaxNPerUser(request);
+        var maxAllowedCountOfCategories = 20;
 
         var countOfCategoriesPerStudentStore = DbContext.Categories
             .Count(el => el.StudentStoreId == request.StudentStoreId);

@@ -20,7 +20,7 @@ public class CreatePurchaseCommandHandler : Command<UniversityOrderAPIDbContext>
 
     public Task<CreatePurchaseCommandResult> Handle(CreatePurchaseCommand request, CancellationToken? cancellationToken)
     {
-        var maxAllowedCountOfPurchases = ConfigHelper.GetMaxNPerUser(request);
+        var maxAllowedCountOfPurchases = 20;
 
         var countOfPurchasesPerStudentStore = DbContext.Categories
             .Count(el => el.StudentStoreId == request.StudentStoreId);

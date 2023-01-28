@@ -20,7 +20,7 @@ public class CreateClientCommandHandler : Command<UniversityOrderAPIDbContext>,
 
     public Task<CreateClientCommandResult> Handle(CreateClientCommand request, CancellationToken? cancellationToken)
     {
-        var maxAllowedCountOfClients = ConfigHelper.GetMaxNPerUser(request);
+        var maxAllowedCountOfClients = 20;
 
         var countOfClientsPerStudentStore = DbContext.Clients
             .Count(el => el.StudentStoreId == request.StudentStoreId);

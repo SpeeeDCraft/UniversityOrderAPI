@@ -20,7 +20,7 @@ public class CreateManufacturerCommandHandler : Command<UniversityOrderAPIDbCont
 
     public Task<CreateManufacturerCommandResult> Handle(CreateManufacturerCommand request, CancellationToken? cancellationToken)
     {
-        var maxAllowedCountOfManufacturers = ConfigHelper.GetMaxNPerUser(request);
+        var maxAllowedCountOfManufacturers = 20;
 
         var countOfManufacturersPerStudentStore = DbContext.Manufacturers
             .Count(el => el.StudentStoreId == request.StudentStoreId);

@@ -21,7 +21,7 @@ public class CreateProductCommandHandler : Command<UniversityOrderAPIDbContext>,
 
     public async Task<CreateProductCommandResult> Handle(CreateProductCommand request, CancellationToken? cancellationToken)
     {
-        var maxAllowedCountOfProducts = ConfigHelper.GetMaxNPerUser(request);
+        var maxAllowedCountOfProducts = 20;
 
         var countOfProductsPerStudentStore = DbContext.Products
             .Count(el => el.StudentStoreId == request.StudentStoreId);
