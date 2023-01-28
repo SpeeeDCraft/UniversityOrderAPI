@@ -31,6 +31,17 @@ public class CreateClientCommandHandler : Command<UniversityOrderAPIDbContext>,
         if (string.IsNullOrEmpty(request.Client.FirstName))
             throw new Exception("Client name null or empty");
 
+        var phoneNumber = request.Client.PhoneNumber;
+
+        if (phoneNumber != null)
+        {
+            if (phoneNumber.Length is > 20 or < 4)
+                throw new Exception($"Phone number length must contain 4-20 characters, but received {phoneNumber.Length}");
+            
+            if (!IsDigitsOnly(phoneNumber))
+                throw new Exception("Phone number must contain only digits");
+        }
+
         var newClient = new DAL.Models.Client
         {
             StudentStoreId = request.StudentStoreId,
@@ -43,9 +54,14 @@ public class CreateClientCommandHandler : Command<UniversityOrderAPIDbContext>,
 
         DbContext.Clients.Add(newClient);
 
-        DbContext.SaveChanges();
+        //DbContext.SaveChanges();
 
         return Task.FromResult(new CreateClientCommandResult(
             newClient.Adapt<ClientDTO>()));
+    }
+
+    private static bool IsDigitsOnly(string str)
+    {
+        return str.All(c => c is >= '0' and <= '9');
     }
 }
