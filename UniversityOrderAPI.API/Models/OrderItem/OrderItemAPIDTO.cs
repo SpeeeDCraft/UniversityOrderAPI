@@ -2,8 +2,6 @@
 
 public class OrderItemAPIDTO
 {
-    private int OrderId { get; set; }
-    
     public int ProductId { get; set; }
     
     public decimal Amount { get; set; }

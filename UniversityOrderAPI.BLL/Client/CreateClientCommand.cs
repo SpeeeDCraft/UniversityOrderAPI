@@ -54,7 +54,7 @@ public class CreateClientCommandHandler : Command<UniversityOrderAPIDbContext>,
 
         DbContext.Clients.Add(newClient);
 
-        //DbContext.SaveChanges();
+        DbContext.SaveChanges();
 
         return Task.FromResult(new CreateClientCommandResult(
             newClient.Adapt<ClientDTO>()));
