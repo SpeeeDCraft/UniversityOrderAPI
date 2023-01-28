@@ -33,5 +33,5 @@ public class OrderAPIDTO
 
     public List<OrderItemAPIDTO> Items { get; set; }
     
-    public string ClientFIO { get; set; }
+    private string ClientFIO { get; set; }
 }

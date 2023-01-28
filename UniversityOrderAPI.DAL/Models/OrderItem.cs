@@ -32,7 +32,5 @@ public class OrderItem:BaseStudentStoreModel
     /// </summary>
     public decimal TotalCost { get; set; }
     
-    
-    
     public Product Product { get; set; }
 }

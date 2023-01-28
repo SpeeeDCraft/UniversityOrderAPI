@@ -2,7 +2,7 @@
 
 public class OrderItemAPIDTO
 {
-    public int OrderId { get; set; }
+    private int OrderId { get; set; }
     
     public int ProductId { get; set; }
     
