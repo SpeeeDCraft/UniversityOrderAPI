@@ -27,13 +27,13 @@ public class CreateProductCommandHandler : Command<UniversityOrderAPIDbContext>,
 
     public async Task<CreateProductCommandResult> Handle(CreateProductCommand request, CancellationToken? cancellationToken)
     {
-        var maxAllowedCountOfProducts = Config.Value.MaxSlotsPerStudent;
+        var maxSlotsPerStudent = Config.Value.MaxSlotsPerStudent;
 
         var countOfProductsPerStudentStore = DbContext.Products
             .Count(el => el.StudentStoreId == request.StudentStoreId);
 
-        if (countOfProductsPerStudentStore >= maxAllowedCountOfProducts)
-            throw new Exception($"Max amount of products per student store was exceeded, allowed: {maxAllowedCountOfProducts}");
+        if (countOfProductsPerStudentStore >= maxSlotsPerStudent)
+            throw new Exception($"Max amount of products per student store was exceeded, allowed: {maxSlotsPerStudent}");
         
         if (string.IsNullOrEmpty(request.Product.Name))
             throw new Exception("Product name is null or empty");

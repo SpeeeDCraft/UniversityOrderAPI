@@ -28,13 +28,13 @@ public class CreateManufacturerCommandHandler : Command<UniversityOrderAPIDbCont
 
     public Task<CreateManufacturerCommandResult> Handle(CreateManufacturerCommand request, CancellationToken? cancellationToken)
     {
-        var maxAllowedCountOfManufacturers = Config.Value.MaxSlotsPerStudent;
+        var maxSlotsPerStudent = Config.Value.MaxSlotsPerStudent;
 
         var countOfManufacturersPerStudentStore = DbContext.Manufacturers
             .Count(el => el.StudentStoreId == request.StudentStoreId);
 
-        if (countOfManufacturersPerStudentStore >= maxAllowedCountOfManufacturers)
-            throw new Exception($"Max amount of manufacturers per student store was exceeded, allowed: {maxAllowedCountOfManufacturers}");
+        if (countOfManufacturersPerStudentStore >= maxSlotsPerStudent)
+            throw new Exception($"Max amount of manufacturers per student store was exceeded, allowed: {maxSlotsPerStudent}");
         
         if (string.IsNullOrEmpty(request.Manufacturer.Name))
             throw new Exception("Manufacturer name null or empty");

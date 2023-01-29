@@ -28,13 +28,13 @@ public class CreateOrderCommandHandler : Command<UniversityOrderAPIDbContext>,
 
     public Task<CreateOrderCommandResult> Handle(CreateOrderCommand request, CancellationToken? cancellationToken)
     {
-        var maxAllowedCountOfOrders = Config.Value.MaxSlotsPerStudent;
+        var maxSlotsPerStudent = Config.Value.MaxSlotsPerStudent;
 
         var countOfOrdersPerStudentStore = DbContext.Order
             .Count(el => el.StudentStoreId == request.StudentStoreId);
 
-        if (countOfOrdersPerStudentStore >= maxAllowedCountOfOrders)
-            throw new Exception($"Max amount of orders per student store was exceeded, allowed: {maxAllowedCountOfOrders}");
+        if (countOfOrdersPerStudentStore >= maxSlotsPerStudent)
+            throw new Exception($"Max amount of orders per student store was exceeded, allowed: {maxSlotsPerStudent}");
 
         var newOrder = new DAL.Models.Order
         {
