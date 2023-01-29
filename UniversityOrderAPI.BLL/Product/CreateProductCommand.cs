@@ -1,5 +1,6 @@
 ﻿using Mapster;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using UniversityOrderAPI.BLL.Command;
 using UniversityOrderAPI.DAL;
 
@@ -15,13 +16,18 @@ public record CreateProductCommandResult(
 ) : ICommandResult;
 
 public class CreateProductCommandHandler : Command<UniversityOrderAPIDbContext>,
-    ICommandHandler<CreateProductCommand, CreateProductCommandResult>
+    ICommandHandler<CreateProductCommand, CreateProductCommandResult>, IConfig
 {
     public CreateProductCommandHandler(UniversityOrderAPIDbContext dbContext) : base(dbContext) { }
 
+    public CreateProductCommandHandler(UniversityOrderAPIDbContext dbContext, IOptions<Config> config) : this(dbContext)
+    {
+        Config = config;
+    }
+
     public async Task<CreateProductCommandResult> Handle(CreateProductCommand request, CancellationToken? cancellationToken)
     {
-        var maxAllowedCountOfProducts = 20;
+        var maxAllowedCountOfProducts = Config.Value.MaxSlotsPerStudent;
 
         var countOfProductsPerStudentStore = DbContext.Products
             .Count(el => el.StudentStoreId == request.StudentStoreId);
@@ -65,4 +71,6 @@ public class CreateProductCommandHandler : Command<UniversityOrderAPIDbContext>,
             newProduct.Adapt<ProductDTO>()
         );
     }
+
+    public IOptions<Config> Config { get; set; }
 }

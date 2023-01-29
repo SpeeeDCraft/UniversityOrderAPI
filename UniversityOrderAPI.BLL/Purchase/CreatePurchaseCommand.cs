@@ -1,4 +1,5 @@
 ﻿using Mapster;
+using Microsoft.Extensions.Options;
 using UniversityOrderAPI.BLL.Command;
 using UniversityOrderAPI.DAL;
 
@@ -14,13 +15,19 @@ public record CreatePurchaseCommandResult(
 ) : ICommandResult;
 
 public class CreatePurchaseCommandHandler : Command<UniversityOrderAPIDbContext>,
-    ICommandHandler<CreatePurchaseCommand, CreatePurchaseCommandResult>
+    ICommandHandler<CreatePurchaseCommand, CreatePurchaseCommandResult>, IConfig
 {
     public CreatePurchaseCommandHandler(UniversityOrderAPIDbContext dbContext) : base(dbContext) { }
 
+    public CreatePurchaseCommandHandler(UniversityOrderAPIDbContext dbContext, IOptions<Config> config) :
+        this(dbContext)
+    {
+        Config = config;
+    }
+
     public Task<CreatePurchaseCommandResult> Handle(CreatePurchaseCommand request, CancellationToken? cancellationToken)
     {
-        var maxAllowedCountOfPurchases = 20;
+        var maxAllowedCountOfPurchases = Config.Value.MaxSlotsPerStudent;
 
         var countOfPurchasesPerStudentStore = DbContext.Categories
             .Count(el => el.StudentStoreId == request.StudentStoreId);
@@ -48,4 +55,6 @@ public class CreatePurchaseCommandHandler : Command<UniversityOrderAPIDbContext>
             newPurchase.Adapt<PurchaseDTO>()
         ));
     }
+
+    public IOptions<Config> Config { get; set; }
 }

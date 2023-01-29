@@ -49,7 +49,7 @@ public class ManufacturerController : BaseApiController
     public async Task<CreateManufacturerResponse> CreateManufacturer([FromBody] CreateManufacturerRequest request)
     {
         ICommandHandler<CreateManufacturerCommand, CreateManufacturerCommandResult> commandHandler =
-            new CreateManufacturerCommandHandler(Db);
+            new CreateManufacturerCommandHandler(Db, Config);
 
         var response = await commandHandler
             .Handle(new CreateManufacturerCommand(GetStudentStoreId, request.Adapt<ManufacturerDTO>()), new CancellationToken());

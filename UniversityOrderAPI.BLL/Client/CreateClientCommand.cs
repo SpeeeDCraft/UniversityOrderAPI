@@ -1,4 +1,5 @@
 ﻿using Mapster;
+using Microsoft.Extensions.Options;
 using UniversityOrderAPI.BLL.Command;
 using UniversityOrderAPI.DAL;
 
@@ -14,13 +15,18 @@ public record CreateClientCommandResult(
 ) : ICommandResult;
 
 public class CreateClientCommandHandler : Command<UniversityOrderAPIDbContext>,
-    ICommandHandler<CreateClientCommand, CreateClientCommandResult>
+    ICommandHandler<CreateClientCommand, CreateClientCommandResult>, IConfig
 {
     public CreateClientCommandHandler(UniversityOrderAPIDbContext dbContext) : base(dbContext) { }
 
+    public CreateClientCommandHandler(UniversityOrderAPIDbContext dbContext, IOptions<Config> config) : this(dbContext)
+    {
+        Config = config;
+    }
+
     public Task<CreateClientCommandResult> Handle(CreateClientCommand request, CancellationToken? cancellationToken)
     {
-        var maxAllowedCountOfClients = 20;
+        var maxAllowedCountOfClients = Config.Value.MaxSlotsPerStudent;
 
         var countOfClientsPerStudentStore = DbContext.Clients
             .Count(el => el.StudentStoreId == request.StudentStoreId);
@@ -64,4 +70,6 @@ public class CreateClientCommandHandler : Command<UniversityOrderAPIDbContext>,
     {
         return str.All(c => c is >= '0' and <= '9');
     }
+
+    public IOptions<Config> Config { get; set; }
 }

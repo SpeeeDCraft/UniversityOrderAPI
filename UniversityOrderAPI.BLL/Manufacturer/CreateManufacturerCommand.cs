@@ -1,4 +1,6 @@
 ﻿using Mapster;
+using Microsoft.Extensions.Options;
+using UniversityOrderAPI.BLL.Category;
 using UniversityOrderAPI.BLL.Command;
 using UniversityOrderAPI.DAL;
 
@@ -14,13 +16,19 @@ public record CreateManufacturerCommandResult(
 ) : ICommandResult;
 
 public class CreateManufacturerCommandHandler : Command<UniversityOrderAPIDbContext>,
-    ICommandHandler<CreateManufacturerCommand, CreateManufacturerCommandResult>
+    ICommandHandler<CreateManufacturerCommand, CreateManufacturerCommandResult>, IConfig
 {
     public CreateManufacturerCommandHandler(UniversityOrderAPIDbContext dbContext) : base(dbContext) { }
 
+    public CreateManufacturerCommandHandler(UniversityOrderAPIDbContext dbContext, IOptions<Config> config) :
+        this(dbContext)
+    {
+        Config = config;
+    }
+
     public Task<CreateManufacturerCommandResult> Handle(CreateManufacturerCommand request, CancellationToken? cancellationToken)
     {
-        var maxAllowedCountOfManufacturers = 20;
+        var maxAllowedCountOfManufacturers = Config.Value.MaxSlotsPerStudent;
 
         var countOfManufacturersPerStudentStore = DbContext.Manufacturers
             .Count(el => el.StudentStoreId == request.StudentStoreId);
@@ -47,5 +55,7 @@ public class CreateManufacturerCommandHandler : Command<UniversityOrderAPIDbCont
             newManufacturer.Adapt<ManufacturerDTO>()
         ));
     }
+
+    public IOptions<Config> Config { get; set; }
 }
 

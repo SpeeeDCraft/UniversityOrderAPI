@@ -1,5 +1,7 @@
 using Mapster;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using UniversityOrderAPI.BLL;
 using UniversityOrderAPI.BLL.Category;
 using UniversityOrderAPI.BLL.Command;
 using UniversityOrderAPI.DAL;
@@ -13,7 +15,7 @@ namespace UniversityOrderAPI.Controllers;
 [Route("[controller]")]
 public class CategoryController : BaseApiController
 {
-    public CategoryController(UniversityOrderAPIDbContext db) : base(db) { }
+    public CategoryController(UniversityOrderAPIDbContext db, IOptions<Config> config) : base(db, config) { }
     
     [HttpGet("{id:int}")]
     public async Task<GetCategoryResponse> GetCategory(int id)
@@ -51,7 +53,7 @@ public class CategoryController : BaseApiController
     public async Task<CreateCategoryResponse> CreateCategory([FromBody] CreateCategoryRequest request)
     {
         ICommandHandler<CreateCategoryCommand, CreateCategoryCommandResult> commandHandler =
-            new CreateCategoryCommandHandler(Db);
+            new CreateCategoryCommandHandler(Db, Config);
 
         var response = await commandHandler
             .Handle(new CreateCategoryCommand(GetStudentStoreId, request.Adapt<CategoryDTO>()), new CancellationToken());
