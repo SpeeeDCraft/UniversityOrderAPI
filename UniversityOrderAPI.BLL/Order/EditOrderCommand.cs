@@ -27,10 +27,22 @@ public class EditOrderCommandHandler : Command<UniversityOrderAPIDbContext>,
         if (order is null)
             throw new Exception($"Order with id {request.Order.Id} not found");
 
+        var oldOrders = DbContext.OrderItems.Where(el => 
+            el.StudentStoreId == request.StudentStoreId && el.OrderId == request.Order.Id).ToList();
+
+        DbContext.OrderItems.RemoveRange(oldOrders);
+        
         order.ClientId = request.Order.ClientId;
         order.OrderCost = request.Order.OrderCost;
         order.Status = (OrderStatus) request.Order.Status;
-        order.Items = request.Order.Items.Select(el => el.Adapt<DAL.Models.OrderItem>()).ToList();
+        order.Items = request.Order.Items.Select(el =>
+        {
+            var element = el.Adapt<DAL.Models.OrderItem>();
+            element.StudentStoreId = request.StudentStoreId;
+
+            return element;
+        }).ToList();
+        order.Client = DbContext.Clients.Single(el => el.Id == request.Order.ClientId);
 
         DbContext.SaveChanges();
 

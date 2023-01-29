@@ -1,4 +1,5 @@
 ﻿using Mapster;
+using Microsoft.Extensions.Options;
 using UniversityOrderAPI.BLL.Command;
 using UniversityOrderAPI.DAL;
 
@@ -14,14 +15,38 @@ public record CreateClientCommandResult(
 ) : ICommandResult;
 
 public class CreateClientCommandHandler : Command<UniversityOrderAPIDbContext>,
-    ICommandHandler<CreateClientCommand, CreateClientCommandResult>
+    ICommandHandler<CreateClientCommand, CreateClientCommandResult>, IConfig
 {
     public CreateClientCommandHandler(UniversityOrderAPIDbContext dbContext) : base(dbContext) { }
 
+    public CreateClientCommandHandler(UniversityOrderAPIDbContext dbContext, IOptions<Config> config) : this(dbContext)
+    {
+        Config = config;
+    }
+
     public Task<CreateClientCommandResult> Handle(CreateClientCommand request, CancellationToken? cancellationToken)
     {
+        var maxAllowedCountOfClients = Config.Value.MaxSlotsPerStudent;
+
+        var countOfClientsPerStudentStore = DbContext.Clients
+            .Count(el => el.StudentStoreId == request.StudentStoreId);
+
+        if (countOfClientsPerStudentStore >= maxAllowedCountOfClients)
+            throw new Exception($"Max amount of clients per student store was exceeded, allowed: {maxAllowedCountOfClients}");
+        
         if (string.IsNullOrEmpty(request.Client.FirstName))
             throw new Exception("Client name null or empty");
+
+        var phoneNumber = request.Client.PhoneNumber;
+
+        if (phoneNumber != null)
+        {
+            if (phoneNumber.Length is > 20 or < 4)
+                throw new Exception($"Phone number length must contain 4-20 characters, but received {phoneNumber.Length}");
+            
+            if (!IsDigitsOnly(phoneNumber))
+                throw new Exception("Phone number must contain only digits");
+        }
 
         var newClient = new DAL.Models.Client
         {
@@ -40,4 +65,11 @@ public class CreateClientCommandHandler : Command<UniversityOrderAPIDbContext>,
         return Task.FromResult(new CreateClientCommandResult(
             newClient.Adapt<ClientDTO>()));
     }
+
+    private static bool IsDigitsOnly(string str)
+    {
+        return str.All(c => c is >= '0' and <= '9');
+    }
+
+    public IOptions<Config> Config { get; set; }
 }

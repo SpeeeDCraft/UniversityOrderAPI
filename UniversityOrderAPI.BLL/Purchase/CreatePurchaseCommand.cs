@@ -1,4 +1,5 @@
 ﻿using Mapster;
+using Microsoft.Extensions.Options;
 using UniversityOrderAPI.BLL.Command;
 using UniversityOrderAPI.DAL;
 
@@ -14,12 +15,26 @@ public record CreatePurchaseCommandResult(
 ) : ICommandResult;
 
 public class CreatePurchaseCommandHandler : Command<UniversityOrderAPIDbContext>,
-    ICommandHandler<CreatePurchaseCommand, CreatePurchaseCommandResult>
+    ICommandHandler<CreatePurchaseCommand, CreatePurchaseCommandResult>, IConfig
 {
     public CreatePurchaseCommandHandler(UniversityOrderAPIDbContext dbContext) : base(dbContext) { }
 
+    public CreatePurchaseCommandHandler(UniversityOrderAPIDbContext dbContext, IOptions<Config> config) :
+        this(dbContext)
+    {
+        Config = config;
+    }
+
     public Task<CreatePurchaseCommandResult> Handle(CreatePurchaseCommand request, CancellationToken? cancellationToken)
     {
+        var maxAllowedCountOfPurchases = Config.Value.MaxSlotsPerStudent;
+
+        var countOfPurchasesPerStudentStore = DbContext.Categories
+            .Count(el => el.StudentStoreId == request.StudentStoreId);
+
+        if (countOfPurchasesPerStudentStore >= maxAllowedCountOfPurchases)
+            throw new Exception($"Max amount of purchases per student store was exceeded, allowed: {maxAllowedCountOfPurchases}");
+        
         var purchase = DbContext.Purchases.SingleOrDefault(el =>
             el.StudentStoreId == request.StudentStoreId && el.OrderId == request.Purchase.OrderId);
 
@@ -40,4 +55,6 @@ public class CreatePurchaseCommandHandler : Command<UniversityOrderAPIDbContext>
             newPurchase.Adapt<PurchaseDTO>()
         ));
     }
+
+    public IOptions<Config> Config { get; set; }
 }

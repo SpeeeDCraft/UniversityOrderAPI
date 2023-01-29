@@ -1,4 +1,6 @@
 ﻿using Mapster;
+using Microsoft.Extensions.Options;
+using UniversityOrderAPI.BLL.Category;
 using UniversityOrderAPI.BLL.Command;
 using UniversityOrderAPI.DAL;
 
@@ -14,12 +16,26 @@ public record CreateManufacturerCommandResult(
 ) : ICommandResult;
 
 public class CreateManufacturerCommandHandler : Command<UniversityOrderAPIDbContext>,
-    ICommandHandler<CreateManufacturerCommand, CreateManufacturerCommandResult>
+    ICommandHandler<CreateManufacturerCommand, CreateManufacturerCommandResult>, IConfig
 {
     public CreateManufacturerCommandHandler(UniversityOrderAPIDbContext dbContext) : base(dbContext) { }
 
+    public CreateManufacturerCommandHandler(UniversityOrderAPIDbContext dbContext, IOptions<Config> config) :
+        this(dbContext)
+    {
+        Config = config;
+    }
+
     public Task<CreateManufacturerCommandResult> Handle(CreateManufacturerCommand request, CancellationToken? cancellationToken)
     {
+        var maxAllowedCountOfManufacturers = Config.Value.MaxSlotsPerStudent;
+
+        var countOfManufacturersPerStudentStore = DbContext.Manufacturers
+            .Count(el => el.StudentStoreId == request.StudentStoreId);
+
+        if (countOfManufacturersPerStudentStore >= maxAllowedCountOfManufacturers)
+            throw new Exception($"Max amount of manufacturers per student store was exceeded, allowed: {maxAllowedCountOfManufacturers}");
+        
         if (string.IsNullOrEmpty(request.Manufacturer.Name))
             throw new Exception("Manufacturer name null or empty");
 
@@ -39,5 +55,7 @@ public class CreateManufacturerCommandHandler : Command<UniversityOrderAPIDbCont
             newManufacturer.Adapt<ManufacturerDTO>()
         ));
     }
+
+    public IOptions<Config> Config { get; set; }
 }
 

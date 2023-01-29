@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using UniversityOrderAPI.BLL;
 using UniversityOrderAPI.DAL;
 using UniversityOrderAPI.Mappers;
 using UniversityOrderAPI.Middleware;
@@ -26,6 +27,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     {
         options.TokenValidationParameters = new UniversityApiTokenValidationParameters();
     });
+
+builder.Services.Configure<Config>(builder.Configuration.GetSection("MyConfig"));
 
 builder.Services.RegisterMapsterConfiguration();
 

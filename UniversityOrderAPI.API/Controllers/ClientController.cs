@@ -49,7 +49,7 @@ public class ClientController : BaseApiController
     public async Task<CreateClientResponse> CreateClient([FromBody] CreateClientRequest request)
     {
         ICommandHandler<CreateClientCommand, CreateClientCommandResult> commandHandler =
-            new CreateClientCommandHandler(Db);
+            new CreateClientCommandHandler(Db, Config);
 
         var response = await commandHandler
             .Handle(new CreateClientCommand(GetStudentStoreId, request.Adapt<ClientDTO>()), new CancellationToken());

@@ -1,4 +1,5 @@
 using Mapster;
+using Microsoft.Extensions.Options;
 using UniversityOrderAPI.BLL.Command;
 using UniversityOrderAPI.DAL;
 
@@ -14,14 +15,28 @@ public record CreateCategoryCommandResult(
 ) : ICommandResult;
 
 
-    public class CreateCategoryCommandHandler : Command<UniversityOrderAPIDbContext>,
-    ICommandHandler<CreateCategoryCommand, CreateCategoryCommandResult>
+public class CreateCategoryCommandHandler : Command<UniversityOrderAPIDbContext>,
+ICommandHandler<CreateCategoryCommand, CreateCategoryCommandResult>, IConfig
 {
     public CreateCategoryCommandHandler(UniversityOrderAPIDbContext dbContext) : base(dbContext) { }
+
+    public CreateCategoryCommandHandler(UniversityOrderAPIDbContext dbContext, IOptions<Config> config) :
+        this(dbContext)
+    {
+        Config = config;
+    }
 
     public Task<CreateCategoryCommandResult> Handle(CreateCategoryCommand request,
         CancellationToken? cancellationToken)
     {
+        var maxAllowedCountOfCategories = Config.Value.MaxSlotsPerStudent;
+
+        var countOfCategoriesPerStudentStore = DbContext.Categories
+            .Count(el => el.StudentStoreId == request.StudentStoreId);
+
+        if (countOfCategoriesPerStudentStore >= maxAllowedCountOfCategories)
+            throw new Exception($"Max amount of categories per student store was exceeded, allowed: {maxAllowedCountOfCategories}");
+        
         if (string.IsNullOrEmpty(request.Category.Name))
             throw new Exception("Category name null or empty");
 
@@ -38,4 +53,6 @@ public record CreateCategoryCommandResult(
         return Task.FromResult(new CreateCategoryCommandResult(
             newCategory.Adapt<CategoryDTO>()));
     }
+
+    public IOptions<Config> Config { get; set; }
 }

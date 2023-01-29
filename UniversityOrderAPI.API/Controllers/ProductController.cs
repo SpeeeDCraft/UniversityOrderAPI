@@ -49,7 +49,7 @@ public class ProductController : BaseApiController
     public async Task<CreateProductResponse> CreateProduct([FromBody] CreateProductRequest request)
     {
         ICommandHandler<CreateProductCommand, CreateProductCommandResult>
-            commandHandler = new CreateProductCommandHandler(Db);
+            commandHandler = new CreateProductCommandHandler(Db, Config);
 
         var response = await commandHandler
             .Handle(new CreateProductCommand(GetStudentStoreId, request.Adapt<ProductDTO>()), new CancellationToken());

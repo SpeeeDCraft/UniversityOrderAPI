@@ -49,7 +49,7 @@ public class OrderController : BaseApiController
     public async Task<CreateOrderResponse> CreateOrder([FromBody] CreateOrderRequest request)
     {
         ICommandHandler<CreateOrderCommand, CreateOrderCommandResult> commandHandler =
-            new CreateOrderCommandHandler(Db);
+            new CreateOrderCommandHandler(Db, Config);
 
         var response = await commandHandler
             .Handle(new CreateOrderCommand(GetStudentStoreId, request.Adapt<OrderDTO>()), new CancellationToken());

@@ -49,7 +49,7 @@ public class PurchaseController : BaseApiController
     public async Task<CreatePurchaseResponse> CreatePurchase([FromBody] CreatePurchaseRequest request)
     {
         ICommandHandler<CreatePurchaseCommand, CreatePurchaseCommandResult>
-            commandHandler = new CreatePurchaseCommandHandler(Db);
+            commandHandler = new CreatePurchaseCommandHandler(Db, Config);
 
         var response = await commandHandler
             .Handle(new CreatePurchaseCommand(GetStudentStoreId, request.Adapt<PurchaseDTO>()), new CancellationToken());
