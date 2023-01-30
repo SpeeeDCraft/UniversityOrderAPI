@@ -1,0 +1,302 @@
+﻿using System.Net.Http.Json;
+using UniversityOrderAPI.BLL.Category;
+using UniversityOrderAPI.BLL.Client;
+using UniversityOrderAPI.BLL.Manufacturer;
+using UniversityOrderAPI.BLL.Order;
+using UniversityOrderAPI.BLL.Product;
+using UniversityOrderAPI.BLL.Purchase;
+using UniversityOrderAPI.Models;
+using UniversityOrderAPI.Models.Category;
+using UniversityOrderAPI.Models.Client;
+using UniversityOrderAPI.Models.Manufacturer;
+using UniversityOrderAPI.Models.Order;
+using UniversityOrderAPI.Models.Product;
+using UniversityOrderAPI.Models.Purchase;
+using UniversityOrderAPI.Models.User;
+
+namespace UniversityOrderAPI.HttpClient;
+
+public class CustomHttpClient : System.Net.Http.HttpClient
+{
+    private CustomHttpClient() 
+    {
+        BaseAddress = new Uri("http://canstudy.ru/orderapi/");
+    }
+
+    private CustomHttpClient(string token) : this()
+    {
+        DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
+    }
+
+    public static CustomHttpClient Create(string identifier)
+    {
+        using var httpClient = new CustomHttpClient();
+
+        var response = httpClient.PostAsJsonAsync("User/login", new LoginRequest
+        {
+            Identifier = identifier
+        }).GetAwaiter().GetResult();
+
+        var responseObject = response.Content.ReasAsJsonAsync<LoginResponse>().GetAwaiter().GetResult();
+        
+        return new CustomHttpClient(responseObject.AuthToken);
+    }
+
+    // Category
+    
+    public async Task<ISingleResult<CategoryAPIDTO>> GetCategoryByIdAsync(int id)
+    {
+        using var response = await GetAsync($"Category/{id}");
+
+        var entry = await response.Content.ReasAsJsonAsync<ISingleResult<CategoryAPIDTO>>();
+
+        return entry;
+    }
+
+    public async Task<IManyResult<CategoryAPIDTO>> GetCategoryListAsync()
+    {
+        using var response = await GetAsync("Category/list");
+
+        var entryList = await response.Content.ReasAsJsonAsync<IManyResult<CategoryAPIDTO>>();
+
+        return entryList; 
+    }
+
+    public async Task<ISingleResult<CategoryAPIDTO>?> CreateCategoryAsync(CategoryDTO item)
+    {
+        using var response = await this.PostAsJsonAsync("Category", item);
+
+        var entry = await response.Content.ReadFromJsonAsync<ISingleResult<CategoryAPIDTO>>();
+
+        return entry;
+    }
+    
+    public async Task<ISingleResult<CategoryAPIDTO>?> PatchCategoryAsync(ISingleResult<CategoryDTO> item)
+    {
+        using var response = await this.PatchAsJsonAsync("Category", item);
+    
+        var entry = await response.Content.ReadFromJsonAsync<ISingleResult<CategoryAPIDTO>>();
+
+        return entry;
+    }
+
+    public async Task DeleteCategoryAsync(int id)
+    {
+        using var response = await DeleteAsync($"Category/{id}");
+    }
+    
+    // Client
+    
+    public async Task<ISingleResult<ClientAPIDTO>> GetClientByIdAsync(int id)
+    {
+        using var response = await GetAsync($"Client/{id}");
+
+        var entry = await response.Content.ReasAsJsonAsync<ISingleResult<ClientAPIDTO>>();
+
+        return entry;
+    }
+
+    public async Task<IManyResult<ClientAPIDTO>> GetClientListAsync()
+    {
+        using var response = await GetAsync("Client/list");
+
+        var entryList = await response.Content.ReasAsJsonAsync<IManyResult<ClientAPIDTO>>();
+
+        return entryList; 
+    }
+
+    public async Task<ISingleResult<ClientAPIDTO>?> CreateClientAsync(ClientDTO item)
+    {
+        using var response = await this.PostAsJsonAsync("Client", item);
+
+        var entry = await response.Content.ReadFromJsonAsync<ISingleResult<ClientAPIDTO>>();
+
+        return entry;
+    }
+    
+    public async Task<ISingleResult<ClientAPIDTO>?> PatchClientAsync(ISingleResult<ClientDTO> item)
+    {
+        using var response = await this.PatchAsJsonAsync("Client", item);
+    
+        var entry = await response.Content.ReadFromJsonAsync<ISingleResult<ClientAPIDTO>>();
+
+        return entry;
+    }
+
+    public async Task DeleteClientAsync(int id)
+    {
+        using var response = await DeleteAsync($"Client/{id}");
+    }
+    
+    // Manufacturer
+    
+    public async Task<ISingleResult<ManufacturerAPIDTO>> GetManufacturerByIdAsync(int id)
+    {
+        using var response = await GetAsync($"Manufacturer/{id}");
+
+        var entry = await response.Content.ReasAsJsonAsync<ISingleResult<ManufacturerAPIDTO>>();
+
+        return entry;
+    }
+
+    public async Task<IManyResult<ManufacturerAPIDTO>> GetManufacturerListAsync()
+    {
+        using var response = await GetAsync("Manufacturer/list");
+
+        var entryList = await response.Content.ReasAsJsonAsync<IManyResult<ManufacturerAPIDTO>>();
+
+        return entryList; 
+    }
+
+    public async Task<ISingleResult<ManufacturerAPIDTO>?> CreateManufacturerAsync(ManufacturerDTO item)
+    {
+        using var response = await this.PostAsJsonAsync("Manufacturer", item);
+
+        var entry = await response.Content.ReadFromJsonAsync<ISingleResult<ManufacturerAPIDTO>>();
+
+        return entry;
+    }
+    
+    public async Task<ISingleResult<ManufacturerAPIDTO>?> PatchManufacturerAsync(ISingleResult<ManufacturerDTO> item)
+    {
+        using var response = await this.PatchAsJsonAsync("Manufacturer", item);
+    
+        var entry = await response.Content.ReadFromJsonAsync<ISingleResult<ManufacturerAPIDTO>>();
+
+        return entry;
+    }
+
+    public async Task DeleteManufacturerAsync(int id)
+    {
+        using var response = await DeleteAsync($"Manufacturer/{id}");
+    }
+    
+    // Order
+    
+    public async Task<ISingleResult<OrderAPIDTO>> GetOrderByIdAsync(int id)
+    {
+        using var response = await GetAsync($"Order/{id}");
+
+        var entry = await response.Content.ReasAsJsonAsync<ISingleResult<OrderAPIDTO>>();
+
+        return entry;
+    }
+
+    public async Task<IManyResult<OrderAPIDTO>> GetOrderListAsync()
+    {
+        using var response = await GetAsync("Order/list");
+
+        var entryList = await response.Content.ReasAsJsonAsync<IManyResult<OrderAPIDTO>>();
+
+        return entryList; 
+    }
+
+    public async Task<ISingleResult<OrderAPIDTO>?> CreateOrderAsync(OrderDTO item)
+    {
+        using var response = await this.PostAsJsonAsync("Order", item);
+
+        var entry = await response.Content.ReadFromJsonAsync<ISingleResult<OrderAPIDTO>>();
+
+        return entry;
+    }
+    
+    public async Task<ISingleResult<OrderAPIDTO>?> PatchOrderAsync(ISingleResult<OrderDTO> item)
+    {
+        using var response = await this.PatchAsJsonAsync("Order", item);
+    
+        var entry = await response.Content.ReadFromJsonAsync<ISingleResult<OrderAPIDTO>>();
+
+        return entry;
+    }
+
+    public async Task DeleteOrderAsync(int id)
+    {
+        using var response = await DeleteAsync($"Order/{id}");
+    }
+    
+    // Product
+    
+    public async Task<ISingleResult<ProductAPIDTO>> GetProductByIdAsync(int id)
+    {
+        using var response = await GetAsync($"Product/{id}");
+
+        var entry = await response.Content.ReasAsJsonAsync<ISingleResult<ProductAPIDTO>>();
+
+        return entry;
+    }
+
+    public async Task<IManyResult<ProductAPIDTO>> GetProductListAsync()
+    {
+        using var response = await GetAsync("Product/list");
+
+        var entryList = await response.Content.ReasAsJsonAsync<IManyResult<ProductAPIDTO>>();
+
+        return entryList; 
+    }
+
+    public async Task<ISingleResult<ProductAPIDTO>?> CreateProductAsync(ProductDTO item)
+    {
+        using var response = await this.PostAsJsonAsync("Product", item);
+
+        var entry = await response.Content.ReadFromJsonAsync<ISingleResult<ProductAPIDTO>>();
+
+        return entry;
+    }
+    
+    public async Task<ISingleResult<ProductAPIDTO>?> PatchProductAsync(ISingleResult<ProductDTO> item)
+    {
+        using var response = await this.PatchAsJsonAsync("Product", item);
+    
+        var entry = await response.Content.ReadFromJsonAsync<ISingleResult<ProductAPIDTO>>();
+
+        return entry;
+    }
+
+    public async Task DeleteProductAsync(int id)
+    {
+        using var response = await DeleteAsync($"Product/{id}");
+    }
+    
+    // Purchase
+    
+    public async Task<ISingleResult<PurchaseAPIDTO>> GetPurchaseByIdAsync(int id)
+    {
+        using var response = await GetAsync($"Purchase/{id}");
+
+        var entry = await response.Content.ReasAsJsonAsync<ISingleResult<PurchaseAPIDTO>>();
+
+        return entry;
+    }
+
+    public async Task<IManyResult<PurchaseAPIDTO>> GetPurchaseListAsync()
+    {
+        using var response = await GetAsync("Purchase/list");
+
+        var entryList = await response.Content.ReasAsJsonAsync<IManyResult<PurchaseAPIDTO>>();
+
+        return entryList; 
+    }
+
+    public async Task<ISingleResult<PurchaseAPIDTO>?> CreatePurchaseAsync(PurchaseDTO item)
+    {
+        using var response = await this.PostAsJsonAsync("Purchase", item);
+
+        var entry = await response.Content.ReadFromJsonAsync<ISingleResult<PurchaseAPIDTO>>();
+
+        return entry;
+    }
+    
+    public async Task<ISingleResult<PurchaseAPIDTO>?> PatchPurchaseAsync(ISingleResult<PurchaseDTO> item)
+    {
+        using var response = await this.PatchAsJsonAsync("Purchase", item);
+    
+        var entry = await response.Content.ReadFromJsonAsync<ISingleResult<PurchaseAPIDTO>>();
+
+        return entry;
+    }
+
+    public async Task DeletePurchaseAsync(int id)
+    {
+        using var response = await DeleteAsync($"Purchase/{id}");
+    }
+}
