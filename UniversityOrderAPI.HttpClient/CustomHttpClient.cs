@@ -39,30 +39,29 @@ public class CustomHttpClient : System.Net.Http.HttpClient
             Identifier = identifier
         }).GetAwaiter().GetResult();
 
-        var responseObject = response.Content.ReasAsJsonAsync<LoginResponse>().GetAwaiter().GetResult();
+        var responseObject = response.ReadAsJsonAsync<LoginResponse>().GetAwaiter().GetResult();
         
         return new CustomHttpClient(responseObject.AuthToken);
     }
 
-    private static async Task CheckResponse(HttpResponseMessage response)
+    public static async Task CheckResponse(HttpResponseMessage httpResponseMessage)
     {
-        if (!response.IsSuccessStatusCode)
+        if (!httpResponseMessage.IsSuccessStatusCode)
         {
-            var errorObj = await response.Content.ReasAsJsonAsync<ErrorModel>();
+            var errorJson = await httpResponseMessage.Content.ReadAsStringAsync();
+            var errorObj = JsonConvert.DeserializeObject<ErrorModel>(errorJson);
 
             throw new ApiException(errorObj.Message);
         }
     }
-    
+
     // Category
 
     public async Task<ISingleResult<CategoryAPIDTO>> GetCategoryByIdAsync(int id)
     {
         var response = await GetAsync($"Category/{id}");
-
-        await CheckResponse(response);
-
-        var entry = await response.Content.ReasAsJsonAsync<ISingleResult<CategoryAPIDTO>>();
+        
+        var entry = await response.ReadAsJsonAsync<ISingleResult<CategoryAPIDTO>>();
         
         return entry;
     }
@@ -71,9 +70,7 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     {
         var response = await GetAsync("Category/list");
 
-        await CheckResponse(response);
-        
-        var entryList = await response.Content.ReasAsJsonAsync<IManyResult<CategoryAPIDTO>>();
+        var entryList = await response.ReadAsJsonAsync<IManyResult<CategoryAPIDTO>>();
 
         return entryList; 
     }
@@ -81,8 +78,6 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     public async Task<ISingleResult<CategoryAPIDTO>?> CreateCategoryAsync(CategoryDTO item)
     {
         var response = await this.PostAsJsonAsync("Category", item);
-
-        await CheckResponse(response);
         
         var entry = await response.Content.ReadFromJsonAsync<ISingleResult<CategoryAPIDTO>>();
 
@@ -92,9 +87,7 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     public async Task<ISingleResult<CategoryAPIDTO>?> PatchCategoryAsync(ISingleResult<CategoryDTO> item)
     {
         var response = await this.PatchAsJsonAsync("Category", item);
-    
-        await CheckResponse(response);
-        
+
         var entry = await response.Content.ReadFromJsonAsync<ISingleResult<CategoryAPIDTO>>();
 
         return entry;
@@ -113,9 +106,7 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     {
         var response = await GetAsync($"Client/{id}");
 
-        await CheckResponse(response);
-        
-        var entry = await response.Content.ReasAsJsonAsync<ISingleResult<ClientAPIDTO>>();
+        var entry = await response.ReadAsJsonAsync<ISingleResult<ClientAPIDTO>>();
 
         return entry;
     }
@@ -124,9 +115,7 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     {
         var response = await GetAsync("Client/list");
 
-        await CheckResponse(response);
-        
-        var entryList = await response.Content.ReasAsJsonAsync<IManyResult<ClientAPIDTO>>();
+        var entryList = await response.ReadAsJsonAsync<IManyResult<ClientAPIDTO>>();
 
         return entryList; 
     }
@@ -135,8 +124,6 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     {
         var response = await this.PostAsJsonAsync("Client", item);
 
-        await CheckResponse(response);
-        
         var entry = await response.Content.ReadFromJsonAsync<ISingleResult<ClientAPIDTO>>();
 
         return entry;
@@ -145,9 +132,7 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     public async Task<ISingleResult<ClientAPIDTO>?> PatchClientAsync(ISingleResult<ClientDTO> item)
     {
         var response = await this.PatchAsJsonAsync("Client", item);
-    
-        await CheckResponse(response);
-        
+
         var entry = await response.Content.ReadFromJsonAsync<ISingleResult<ClientAPIDTO>>();
 
         return entry;
@@ -166,9 +151,7 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     {
         var response = await GetAsync($"Manufacturer/{id}");
 
-        await CheckResponse(response);
-        
-        var entry = await response.Content.ReasAsJsonAsync<ISingleResult<ManufacturerAPIDTO>>();
+        var entry = await response.ReadAsJsonAsync<ISingleResult<ManufacturerAPIDTO>>();
 
         return entry;
     }
@@ -177,9 +160,7 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     {
         var response = await GetAsync("Manufacturer/list");
 
-        await CheckResponse(response);
-        
-        var entryList = await response.Content.ReasAsJsonAsync<IManyResult<ManufacturerAPIDTO>>();
+        var entryList = await response.ReadAsJsonAsync<IManyResult<ManufacturerAPIDTO>>();
 
         return entryList; 
     }
@@ -188,8 +169,6 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     {
         var response = await this.PostAsJsonAsync("Manufacturer", item);
 
-        await CheckResponse(response);
-        
         var entry = await response.Content.ReadFromJsonAsync<ISingleResult<ManufacturerAPIDTO>>();
 
         return entry;
@@ -198,9 +177,7 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     public async Task<ISingleResult<ManufacturerAPIDTO>?> PatchManufacturerAsync(ISingleResult<ManufacturerDTO> item)
     {
         var response = await this.PatchAsJsonAsync("Manufacturer", item);
-    
-        await CheckResponse(response);
-        
+
         var entry = await response.Content.ReadFromJsonAsync<ISingleResult<ManufacturerAPIDTO>>();
 
         return entry;
@@ -219,9 +196,7 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     {
         var response = await GetAsync($"Order/{id}");
 
-        await CheckResponse(response);
-        
-        var entry = await response.Content.ReasAsJsonAsync<ISingleResult<OrderAPIDTO>>();
+        var entry = await response.ReadAsJsonAsync<ISingleResult<OrderAPIDTO>>();
 
         return entry;
     }
@@ -230,9 +205,7 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     {
         var response = await GetAsync("Order/list");
 
-        await CheckResponse(response);
-        
-        var entryList = await response.Content.ReasAsJsonAsync<IManyResult<OrderAPIDTO>>();
+        var entryList = await response.ReadAsJsonAsync<IManyResult<OrderAPIDTO>>();
 
         return entryList; 
     }
@@ -241,8 +214,6 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     {
         var response = await this.PostAsJsonAsync("Order", item);
 
-        await CheckResponse(response);
-        
         var entry = await response.Content.ReadFromJsonAsync<ISingleResult<OrderAPIDTO>>();
 
         return entry;
@@ -251,9 +222,7 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     public async Task<ISingleResult<OrderAPIDTO>?> PatchOrderAsync(ISingleResult<OrderDTO> item)
     {
         var response = await this.PatchAsJsonAsync("Order", item);
-    
-        await CheckResponse(response);
-        
+
         var entry = await response.Content.ReadFromJsonAsync<ISingleResult<OrderAPIDTO>>();
 
         return entry;
@@ -272,9 +241,7 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     {
         var response = await GetAsync($"Product/{id}");
 
-        await CheckResponse(response);
-        
-        var entry = await response.Content.ReasAsJsonAsync<ISingleResult<ProductAPIDTO>>();
+        var entry = await response.ReadAsJsonAsync<ISingleResult<ProductAPIDTO>>();
 
         return entry;
     }
@@ -283,9 +250,7 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     {
         var response = await GetAsync("Product/list");
 
-        await CheckResponse(response);
-        
-        var entryList = await response.Content.ReasAsJsonAsync<IManyResult<ProductAPIDTO>>();
+        var entryList = await response.ReadAsJsonAsync<IManyResult<ProductAPIDTO>>();
 
         return entryList; 
     }
@@ -294,8 +259,6 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     {
         var response = await this.PostAsJsonAsync("Product", item);
 
-        await CheckResponse(response);
-        
         var entry = await response.Content.ReadFromJsonAsync<ISingleResult<ProductAPIDTO>>();
 
         return entry;
@@ -304,9 +267,7 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     public async Task<ISingleResult<ProductAPIDTO>?> PatchProductAsync(ISingleResult<ProductDTO> item)
     {
         var response = await this.PatchAsJsonAsync("Product", item);
-    
-        await CheckResponse(response);
-        
+
         var entry = await response.Content.ReadFromJsonAsync<ISingleResult<ProductAPIDTO>>();
 
         return entry;
@@ -325,9 +286,7 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     {
         var response = await GetAsync($"Purchase/{id}");
 
-        await CheckResponse(response);
-        
-        var entry = await response.Content.ReasAsJsonAsync<ISingleResult<PurchaseAPIDTO>>();
+        var entry = await response.ReadAsJsonAsync<ISingleResult<PurchaseAPIDTO>>();
 
         return entry;
     }
@@ -336,9 +295,7 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     {
         var response = await GetAsync("Purchase/list");
 
-        await CheckResponse(response);
-        
-        var entryList = await response.Content.ReasAsJsonAsync<IManyResult<PurchaseAPIDTO>>();
+        var entryList = await response.ReadAsJsonAsync<IManyResult<PurchaseAPIDTO>>();
 
         return entryList; 
     }
@@ -347,8 +304,6 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     {
         var response = await this.PostAsJsonAsync("Purchase", item);
 
-        await CheckResponse(response);
-        
         var entry = await response.Content.ReadFromJsonAsync<ISingleResult<PurchaseAPIDTO>>();
 
         return entry;
@@ -357,9 +312,7 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     public async Task<ISingleResult<PurchaseAPIDTO>?> PatchPurchaseAsync(ISingleResult<PurchaseDTO> item)
     {
         var response = await this.PatchAsJsonAsync("Purchase", item);
-    
-        await CheckResponse(response);
-        
+
         var entry = await response.Content.ReadFromJsonAsync<ISingleResult<PurchaseAPIDTO>>();
 
         return entry;
