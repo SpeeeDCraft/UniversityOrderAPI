@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Identity;
-
 namespace UniversityOrderAPI.Models.Category;
 
 public record CategoryAPIDTO

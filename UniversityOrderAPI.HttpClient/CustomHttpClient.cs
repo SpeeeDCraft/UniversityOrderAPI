@@ -1,10 +1,12 @@
 ﻿using System.Net.Http.Json;
+using Newtonsoft.Json;
 using UniversityOrderAPI.BLL.Category;
 using UniversityOrderAPI.BLL.Client;
 using UniversityOrderAPI.BLL.Manufacturer;
 using UniversityOrderAPI.BLL.Order;
 using UniversityOrderAPI.BLL.Product;
 using UniversityOrderAPI.BLL.Purchase;
+using UniversityOrderAPI.Middleware.Models;
 using UniversityOrderAPI.Models;
 using UniversityOrderAPI.Models.Category;
 using UniversityOrderAPI.Models.Client;
@@ -42,14 +44,26 @@ public class CustomHttpClient : System.Net.Http.HttpClient
         return new CustomHttpClient(responseObject.AuthToken);
     }
 
-    // Category
+    private static async Task CheckResponse(HttpResponseMessage response)
+    {
+        if (!response.IsSuccessStatusCode)
+        {
+            var errorObj = await response.Content.ReasAsJsonAsync<ErrorModel>();
+
+            throw new ApiException(errorObj.Message);
+        }
+    }
     
+    // Category
+
     public async Task<ISingleResult<CategoryAPIDTO>> GetCategoryByIdAsync(int id)
     {
-        using var response = await GetAsync($"Category/{id}");
+        var response = await GetAsync($"Category/{id}");
+
+        await CheckResponse(response);
 
         var entry = await response.Content.ReasAsJsonAsync<ISingleResult<CategoryAPIDTO>>();
-
+        
         return entry;
     }
 
@@ -57,6 +71,8 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     {
         using var response = await GetAsync("Category/list");
 
+        await CheckResponse(response);
+        
         var entryList = await response.Content.ReasAsJsonAsync<IManyResult<CategoryAPIDTO>>();
 
         return entryList; 
@@ -66,6 +82,8 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     {
         using var response = await this.PostAsJsonAsync("Category", item);
 
+        await CheckResponse(response);
+        
         var entry = await response.Content.ReadFromJsonAsync<ISingleResult<CategoryAPIDTO>>();
 
         return entry;
@@ -75,6 +93,8 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     {
         using var response = await this.PatchAsJsonAsync("Category", item);
     
+        await CheckResponse(response);
+        
         var entry = await response.Content.ReadFromJsonAsync<ISingleResult<CategoryAPIDTO>>();
 
         return entry;
@@ -83,6 +103,8 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     public async Task DeleteCategoryAsync(int id)
     {
         using var response = await DeleteAsync($"Category/{id}");
+        
+        await CheckResponse(response);
     }
     
     // Client
@@ -91,6 +113,8 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     {
         using var response = await GetAsync($"Client/{id}");
 
+        await CheckResponse(response);
+        
         var entry = await response.Content.ReasAsJsonAsync<ISingleResult<ClientAPIDTO>>();
 
         return entry;
@@ -100,6 +124,8 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     {
         using var response = await GetAsync("Client/list");
 
+        await CheckResponse(response);
+        
         var entryList = await response.Content.ReasAsJsonAsync<IManyResult<ClientAPIDTO>>();
 
         return entryList; 
@@ -109,6 +135,8 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     {
         using var response = await this.PostAsJsonAsync("Client", item);
 
+        await CheckResponse(response);
+        
         var entry = await response.Content.ReadFromJsonAsync<ISingleResult<ClientAPIDTO>>();
 
         return entry;
@@ -118,6 +146,8 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     {
         using var response = await this.PatchAsJsonAsync("Client", item);
     
+        await CheckResponse(response);
+        
         var entry = await response.Content.ReadFromJsonAsync<ISingleResult<ClientAPIDTO>>();
 
         return entry;
@@ -126,6 +156,8 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     public async Task DeleteClientAsync(int id)
     {
         using var response = await DeleteAsync($"Client/{id}");
+        
+        await CheckResponse(response);
     }
     
     // Manufacturer
@@ -134,6 +166,8 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     {
         using var response = await GetAsync($"Manufacturer/{id}");
 
+        await CheckResponse(response);
+        
         var entry = await response.Content.ReasAsJsonAsync<ISingleResult<ManufacturerAPIDTO>>();
 
         return entry;
@@ -143,6 +177,8 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     {
         using var response = await GetAsync("Manufacturer/list");
 
+        await CheckResponse(response);
+        
         var entryList = await response.Content.ReasAsJsonAsync<IManyResult<ManufacturerAPIDTO>>();
 
         return entryList; 
@@ -152,6 +188,8 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     {
         using var response = await this.PostAsJsonAsync("Manufacturer", item);
 
+        await CheckResponse(response);
+        
         var entry = await response.Content.ReadFromJsonAsync<ISingleResult<ManufacturerAPIDTO>>();
 
         return entry;
@@ -161,6 +199,8 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     {
         using var response = await this.PatchAsJsonAsync("Manufacturer", item);
     
+        await CheckResponse(response);
+        
         var entry = await response.Content.ReadFromJsonAsync<ISingleResult<ManufacturerAPIDTO>>();
 
         return entry;
@@ -169,6 +209,8 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     public async Task DeleteManufacturerAsync(int id)
     {
         using var response = await DeleteAsync($"Manufacturer/{id}");
+        
+        await CheckResponse(response);
     }
     
     // Order
@@ -177,6 +219,8 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     {
         using var response = await GetAsync($"Order/{id}");
 
+        await CheckResponse(response);
+        
         var entry = await response.Content.ReasAsJsonAsync<ISingleResult<OrderAPIDTO>>();
 
         return entry;
@@ -186,6 +230,8 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     {
         using var response = await GetAsync("Order/list");
 
+        await CheckResponse(response);
+        
         var entryList = await response.Content.ReasAsJsonAsync<IManyResult<OrderAPIDTO>>();
 
         return entryList; 
@@ -195,6 +241,8 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     {
         using var response = await this.PostAsJsonAsync("Order", item);
 
+        await CheckResponse(response);
+        
         var entry = await response.Content.ReadFromJsonAsync<ISingleResult<OrderAPIDTO>>();
 
         return entry;
@@ -204,6 +252,8 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     {
         using var response = await this.PatchAsJsonAsync("Order", item);
     
+        await CheckResponse(response);
+        
         var entry = await response.Content.ReadFromJsonAsync<ISingleResult<OrderAPIDTO>>();
 
         return entry;
@@ -212,6 +262,8 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     public async Task DeleteOrderAsync(int id)
     {
         using var response = await DeleteAsync($"Order/{id}");
+        
+        await CheckResponse(response);
     }
     
     // Product
@@ -220,6 +272,8 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     {
         using var response = await GetAsync($"Product/{id}");
 
+        await CheckResponse(response);
+        
         var entry = await response.Content.ReasAsJsonAsync<ISingleResult<ProductAPIDTO>>();
 
         return entry;
@@ -229,6 +283,8 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     {
         using var response = await GetAsync("Product/list");
 
+        await CheckResponse(response);
+        
         var entryList = await response.Content.ReasAsJsonAsync<IManyResult<ProductAPIDTO>>();
 
         return entryList; 
@@ -238,6 +294,8 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     {
         using var response = await this.PostAsJsonAsync("Product", item);
 
+        await CheckResponse(response);
+        
         var entry = await response.Content.ReadFromJsonAsync<ISingleResult<ProductAPIDTO>>();
 
         return entry;
@@ -247,6 +305,8 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     {
         using var response = await this.PatchAsJsonAsync("Product", item);
     
+        await CheckResponse(response);
+        
         var entry = await response.Content.ReadFromJsonAsync<ISingleResult<ProductAPIDTO>>();
 
         return entry;
@@ -255,6 +315,8 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     public async Task DeleteProductAsync(int id)
     {
         using var response = await DeleteAsync($"Product/{id}");
+        
+        await CheckResponse(response);
     }
     
     // Purchase
@@ -263,6 +325,8 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     {
         using var response = await GetAsync($"Purchase/{id}");
 
+        await CheckResponse(response);
+        
         var entry = await response.Content.ReasAsJsonAsync<ISingleResult<PurchaseAPIDTO>>();
 
         return entry;
@@ -272,6 +336,8 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     {
         using var response = await GetAsync("Purchase/list");
 
+        await CheckResponse(response);
+        
         var entryList = await response.Content.ReasAsJsonAsync<IManyResult<PurchaseAPIDTO>>();
 
         return entryList; 
@@ -281,6 +347,8 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     {
         using var response = await this.PostAsJsonAsync("Purchase", item);
 
+        await CheckResponse(response);
+        
         var entry = await response.Content.ReadFromJsonAsync<ISingleResult<PurchaseAPIDTO>>();
 
         return entry;
@@ -290,6 +358,8 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     {
         using var response = await this.PatchAsJsonAsync("Purchase", item);
     
+        await CheckResponse(response);
+        
         var entry = await response.Content.ReadFromJsonAsync<ISingleResult<PurchaseAPIDTO>>();
 
         return entry;
@@ -298,5 +368,7 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     public async Task DeletePurchaseAsync(int id)
     {
         using var response = await DeleteAsync($"Purchase/{id}");
+        
+        await CheckResponse(response);
     }
 }
