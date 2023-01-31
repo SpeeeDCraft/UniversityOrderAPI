@@ -69,7 +69,7 @@ public class CustomHttpClient : System.Net.Http.HttpClient
 
     public async Task<IManyResult<CategoryAPIDTO>> GetCategoryListAsync()
     {
-        using var response = await GetAsync("Category/list");
+        var response = await GetAsync("Category/list");
 
         await CheckResponse(response);
         
@@ -80,7 +80,7 @@ public class CustomHttpClient : System.Net.Http.HttpClient
 
     public async Task<ISingleResult<CategoryAPIDTO>?> CreateCategoryAsync(CategoryDTO item)
     {
-        using var response = await this.PostAsJsonAsync("Category", item);
+        var response = await this.PostAsJsonAsync("Category", item);
 
         await CheckResponse(response);
         
@@ -91,7 +91,7 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     
     public async Task<ISingleResult<CategoryAPIDTO>?> PatchCategoryAsync(ISingleResult<CategoryDTO> item)
     {
-        using var response = await this.PatchAsJsonAsync("Category", item);
+        var response = await this.PatchAsJsonAsync("Category", item);
     
         await CheckResponse(response);
         
@@ -102,7 +102,7 @@ public class CustomHttpClient : System.Net.Http.HttpClient
 
     public async Task DeleteCategoryAsync(int id)
     {
-        using var response = await DeleteAsync($"Category/{id}");
+        var response = await DeleteAsync($"Category/{id}");
         
         await CheckResponse(response);
     }
@@ -111,7 +111,7 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     
     public async Task<ISingleResult<ClientAPIDTO>> GetClientByIdAsync(int id)
     {
-        using var response = await GetAsync($"Client/{id}");
+        var response = await GetAsync($"Client/{id}");
 
         await CheckResponse(response);
         
@@ -122,7 +122,7 @@ public class CustomHttpClient : System.Net.Http.HttpClient
 
     public async Task<IManyResult<ClientAPIDTO>> GetClientListAsync()
     {
-        using var response = await GetAsync("Client/list");
+        var response = await GetAsync("Client/list");
 
         await CheckResponse(response);
         
@@ -133,7 +133,7 @@ public class CustomHttpClient : System.Net.Http.HttpClient
 
     public async Task<ISingleResult<ClientAPIDTO>?> CreateClientAsync(ClientDTO item)
     {
-        using var response = await this.PostAsJsonAsync("Client", item);
+        var response = await this.PostAsJsonAsync("Client", item);
 
         await CheckResponse(response);
         
@@ -144,7 +144,7 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     
     public async Task<ISingleResult<ClientAPIDTO>?> PatchClientAsync(ISingleResult<ClientDTO> item)
     {
-        using var response = await this.PatchAsJsonAsync("Client", item);
+        var response = await this.PatchAsJsonAsync("Client", item);
     
         await CheckResponse(response);
         
@@ -155,7 +155,7 @@ public class CustomHttpClient : System.Net.Http.HttpClient
 
     public async Task DeleteClientAsync(int id)
     {
-        using var response = await DeleteAsync($"Client/{id}");
+        var response = await DeleteAsync($"Client/{id}");
         
         await CheckResponse(response);
     }
@@ -164,7 +164,7 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     
     public async Task<ISingleResult<ManufacturerAPIDTO>> GetManufacturerByIdAsync(int id)
     {
-        using var response = await GetAsync($"Manufacturer/{id}");
+        var response = await GetAsync($"Manufacturer/{id}");
 
         await CheckResponse(response);
         
@@ -175,7 +175,7 @@ public class CustomHttpClient : System.Net.Http.HttpClient
 
     public async Task<IManyResult<ManufacturerAPIDTO>> GetManufacturerListAsync()
     {
-        using var response = await GetAsync("Manufacturer/list");
+        var response = await GetAsync("Manufacturer/list");
 
         await CheckResponse(response);
         
@@ -186,7 +186,7 @@ public class CustomHttpClient : System.Net.Http.HttpClient
 
     public async Task<ISingleResult<ManufacturerAPIDTO>?> CreateManufacturerAsync(ManufacturerDTO item)
     {
-        using var response = await this.PostAsJsonAsync("Manufacturer", item);
+        var response = await this.PostAsJsonAsync("Manufacturer", item);
 
         await CheckResponse(response);
         
@@ -197,7 +197,7 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     
     public async Task<ISingleResult<ManufacturerAPIDTO>?> PatchManufacturerAsync(ISingleResult<ManufacturerDTO> item)
     {
-        using var response = await this.PatchAsJsonAsync("Manufacturer", item);
+        var response = await this.PatchAsJsonAsync("Manufacturer", item);
     
         await CheckResponse(response);
         
@@ -208,7 +208,7 @@ public class CustomHttpClient : System.Net.Http.HttpClient
 
     public async Task DeleteManufacturerAsync(int id)
     {
-        using var response = await DeleteAsync($"Manufacturer/{id}");
+        var response = await DeleteAsync($"Manufacturer/{id}");
         
         await CheckResponse(response);
     }
@@ -217,7 +217,7 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     
     public async Task<ISingleResult<OrderAPIDTO>> GetOrderByIdAsync(int id)
     {
-        using var response = await GetAsync($"Order/{id}");
+        var response = await GetAsync($"Order/{id}");
 
         await CheckResponse(response);
         
@@ -228,7 +228,7 @@ public class CustomHttpClient : System.Net.Http.HttpClient
 
     public async Task<IManyResult<OrderAPIDTO>> GetOrderListAsync()
     {
-        using var response = await GetAsync("Order/list");
+        var response = await GetAsync("Order/list");
 
         await CheckResponse(response);
         
@@ -239,7 +239,7 @@ public class CustomHttpClient : System.Net.Http.HttpClient
 
     public async Task<ISingleResult<OrderAPIDTO>?> CreateOrderAsync(OrderDTO item)
     {
-        using var response = await this.PostAsJsonAsync("Order", item);
+        var response = await this.PostAsJsonAsync("Order", item);
 
         await CheckResponse(response);
         
@@ -250,7 +250,7 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     
     public async Task<ISingleResult<OrderAPIDTO>?> PatchOrderAsync(ISingleResult<OrderDTO> item)
     {
-        using var response = await this.PatchAsJsonAsync("Order", item);
+        var response = await this.PatchAsJsonAsync("Order", item);
     
         await CheckResponse(response);
         
@@ -261,7 +261,7 @@ public class CustomHttpClient : System.Net.Http.HttpClient
 
     public async Task DeleteOrderAsync(int id)
     {
-        using var response = await DeleteAsync($"Order/{id}");
+        var response = await DeleteAsync($"Order/{id}");
         
         await CheckResponse(response);
     }
@@ -270,7 +270,7 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     
     public async Task<ISingleResult<ProductAPIDTO>> GetProductByIdAsync(int id)
     {
-        using var response = await GetAsync($"Product/{id}");
+        var response = await GetAsync($"Product/{id}");
 
         await CheckResponse(response);
         
@@ -281,7 +281,7 @@ public class CustomHttpClient : System.Net.Http.HttpClient
 
     public async Task<IManyResult<ProductAPIDTO>> GetProductListAsync()
     {
-        using var response = await GetAsync("Product/list");
+        var response = await GetAsync("Product/list");
 
         await CheckResponse(response);
         
@@ -292,7 +292,7 @@ public class CustomHttpClient : System.Net.Http.HttpClient
 
     public async Task<ISingleResult<ProductAPIDTO>?> CreateProductAsync(ProductDTO item)
     {
-        using var response = await this.PostAsJsonAsync("Product", item);
+        var response = await this.PostAsJsonAsync("Product", item);
 
         await CheckResponse(response);
         
@@ -303,7 +303,7 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     
     public async Task<ISingleResult<ProductAPIDTO>?> PatchProductAsync(ISingleResult<ProductDTO> item)
     {
-        using var response = await this.PatchAsJsonAsync("Product", item);
+        var response = await this.PatchAsJsonAsync("Product", item);
     
         await CheckResponse(response);
         
@@ -314,7 +314,7 @@ public class CustomHttpClient : System.Net.Http.HttpClient
 
     public async Task DeleteProductAsync(int id)
     {
-        using var response = await DeleteAsync($"Product/{id}");
+        var response = await DeleteAsync($"Product/{id}");
         
         await CheckResponse(response);
     }
@@ -323,7 +323,7 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     
     public async Task<ISingleResult<PurchaseAPIDTO>> GetPurchaseByIdAsync(int id)
     {
-        using var response = await GetAsync($"Purchase/{id}");
+        var response = await GetAsync($"Purchase/{id}");
 
         await CheckResponse(response);
         
@@ -334,7 +334,7 @@ public class CustomHttpClient : System.Net.Http.HttpClient
 
     public async Task<IManyResult<PurchaseAPIDTO>> GetPurchaseListAsync()
     {
-        using var response = await GetAsync("Purchase/list");
+        var response = await GetAsync("Purchase/list");
 
         await CheckResponse(response);
         
@@ -345,7 +345,7 @@ public class CustomHttpClient : System.Net.Http.HttpClient
 
     public async Task<ISingleResult<PurchaseAPIDTO>?> CreatePurchaseAsync(PurchaseDTO item)
     {
-        using var response = await this.PostAsJsonAsync("Purchase", item);
+        var response = await this.PostAsJsonAsync("Purchase", item);
 
         await CheckResponse(response);
         
@@ -356,7 +356,7 @@ public class CustomHttpClient : System.Net.Http.HttpClient
     
     public async Task<ISingleResult<PurchaseAPIDTO>?> PatchPurchaseAsync(ISingleResult<PurchaseDTO> item)
     {
-        using var response = await this.PatchAsJsonAsync("Purchase", item);
+        var response = await this.PatchAsJsonAsync("Purchase", item);
     
         await CheckResponse(response);
         
@@ -367,7 +367,7 @@ public class CustomHttpClient : System.Net.Http.HttpClient
 
     public async Task DeletePurchaseAsync(int id)
     {
-        using var response = await DeleteAsync($"Purchase/{id}");
+        var response = await DeleteAsync($"Purchase/{id}");
         
         await CheckResponse(response);
     }
