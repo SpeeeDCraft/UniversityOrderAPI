@@ -27,13 +27,13 @@ public class CreatePurchaseCommandHandler : Command<UniversityOrderAPIDbContext>
 
     public Task<CreatePurchaseCommandResult> Handle(CreatePurchaseCommand request, CancellationToken? cancellationToken)
     {
-        var maxAllowedCountOfPurchases = Config.Value.MaxSlotsPerStudent;
+        var maxSlotsPerStudent = Config.Value.MaxSlotsPerStudent;
 
         var countOfPurchasesPerStudentStore = DbContext.Categories
             .Count(el => el.StudentStoreId == request.StudentStoreId);
 
-        if (countOfPurchasesPerStudentStore >= maxAllowedCountOfPurchases)
-            throw new Exception($"Max amount of purchases per student store was exceeded, allowed: {maxAllowedCountOfPurchases}");
+        if (countOfPurchasesPerStudentStore >= maxSlotsPerStudent)
+            throw new Exception($"Max amount of purchases per student store was exceeded, allowed: {maxSlotsPerStudent}");
         
         var purchase = DbContext.Purchases.SingleOrDefault(el =>
             el.StudentStoreId == request.StudentStoreId && el.OrderId == request.Purchase.OrderId);

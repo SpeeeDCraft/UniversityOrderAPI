@@ -29,13 +29,13 @@ ICommandHandler<CreateCategoryCommand, CreateCategoryCommandResult>, IConfig
     public Task<CreateCategoryCommandResult> Handle(CreateCategoryCommand request,
         CancellationToken? cancellationToken)
     {
-        var maxAllowedCountOfCategories = Config.Value.MaxSlotsPerStudent;
+        var maxSlotsPerStudent = Config.Value.MaxSlotsPerStudent;
 
         var countOfCategoriesPerStudentStore = DbContext.Categories
             .Count(el => el.StudentStoreId == request.StudentStoreId);
 
-        if (countOfCategoriesPerStudentStore >= maxAllowedCountOfCategories)
-            throw new Exception($"Max amount of categories per student store was exceeded, allowed: {maxAllowedCountOfCategories}");
+        if (countOfCategoriesPerStudentStore >= maxSlotsPerStudent)
+            throw new Exception($"Max amount of categories per student store was exceeded, allowed: {maxSlotsPerStudent}");
         
         if (string.IsNullOrEmpty(request.Category.Name))
             throw new Exception("Category name null or empty");

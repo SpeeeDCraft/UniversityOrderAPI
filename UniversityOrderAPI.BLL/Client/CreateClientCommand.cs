@@ -26,13 +26,13 @@ public class CreateClientCommandHandler : Command<UniversityOrderAPIDbContext>,
 
     public Task<CreateClientCommandResult> Handle(CreateClientCommand request, CancellationToken? cancellationToken)
     {
-        var maxAllowedCountOfClients = Config.Value.MaxSlotsPerStudent;
+        var maxSlotsPerStudent = Config.Value.MaxSlotsPerStudent;
 
         var countOfClientsPerStudentStore = DbContext.Clients
             .Count(el => el.StudentStoreId == request.StudentStoreId);
 
-        if (countOfClientsPerStudentStore >= maxAllowedCountOfClients)
-            throw new Exception($"Max amount of clients per student store was exceeded, allowed: {maxAllowedCountOfClients}");
+        if (countOfClientsPerStudentStore >= maxSlotsPerStudent)
+            throw new Exception($"Max amount of clients per student store was exceeded, allowed: {maxSlotsPerStudent}");
         
         if (string.IsNullOrEmpty(request.Client.FirstName))
             throw new Exception("Client name null or empty");
