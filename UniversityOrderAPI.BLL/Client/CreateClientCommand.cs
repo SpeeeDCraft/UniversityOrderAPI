@@ -55,7 +55,8 @@ public class CreateClientCommandHandler : Command<UniversityOrderAPIDbContext>,
             FirstName = request.Client.FirstName,
             LastName = request.Client.LastName,
             Email = request.Client.Email,
-            PhoneNumber = request.Client.PhoneNumber
+            PhoneNumber = request.Client.PhoneNumber,
+            IsDeleted = false
         };
 
         DbContext.Clients.Add(newClient);
