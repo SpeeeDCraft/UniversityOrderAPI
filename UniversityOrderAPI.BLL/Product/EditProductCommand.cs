@@ -17,11 +17,9 @@ public record EditProductCommandResult(
 public class EditProductCommandHandler : Command<UniversityOrderAPIDbContext>,
     ICommandHandler<EditProductCommand, EditProductCommandResult>
 {
-    public EditProductCommandHandler(UniversityOrderAPIDbContext dbContext) : base(dbContext)
-    {
-    }
+    public EditProductCommandHandler(UniversityOrderAPIDbContext dbContext) : base(dbContext) { }
 
-    public async Task<EditProductCommandResult> Handle(EditProductCommand request, CancellationToken? cancellationToken)
+    public Task<EditProductCommandResult> Handle(EditProductCommand request, CancellationToken? cancellationToken)
     {
         if (string.IsNullOrEmpty(request.Product.Name))
             throw new Exception("Product name is null or empty");
@@ -35,19 +33,19 @@ public class EditProductCommandHandler : Command<UniversityOrderAPIDbContext>,
                 el.StudentStoreId == request.StudentStoreId
         );
 
-        var categoryExistsTask = DbContext.Categories.AnyAsync(el => el.Id == request.Product.CategoryId);
-
-        var manufacturerExistsTask = DbContext.Manufacturers.AnyAsync(el => el.Id == request.Product.ManufacturerId);
-
         if (product == null)
             throw new Exception($"Product with id: {request.Product.Id} not found");
+        
+        var categoryExists = DbContext.Categories.Any(el => el.Id == request.Product.CategoryId);
 
-        if (!(await categoryExistsTask))
+        if (!categoryExists)
             throw new Exception($"CategoryId with id: {request.Product.CategoryId} not found");
+        
+        var manufacturerExistsTask = DbContext.Manufacturers.Any(el => el.Id == request.Product.ManufacturerId);
 
-        if (!(await manufacturerExistsTask))
+        if (!manufacturerExistsTask)
             throw new Exception($"ManufacturerId with id: {request.Product.ManufacturerId} not found");
-
+        
         product.Name = request.Product.Name;
         product.Description = request.Product.Description;
         product.Cost = request.Product.Cost;
@@ -56,8 +54,8 @@ public class EditProductCommandHandler : Command<UniversityOrderAPIDbContext>,
 
         DbContext.SaveChanges();
 
-        return new EditProductCommandResult(
-            product.Adapt<ProductDTO>()
+        return Task.FromResult(new EditProductCommandResult(
+            product.Adapt<ProductDTO>()) 
         );
     }
 }
