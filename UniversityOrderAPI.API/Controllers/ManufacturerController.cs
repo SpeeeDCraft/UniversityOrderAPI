@@ -1,5 +1,7 @@
 ﻿using Mapster;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using UniversityOrderAPI.BLL;
 using UniversityOrderAPI.BLL.Command;
 using UniversityOrderAPI.BLL.Manufacturer;
 using UniversityOrderAPI.DAL;
@@ -13,7 +15,7 @@ namespace UniversityOrderAPI.Controllers;
 [Route("[controller]")]
 public class ManufacturerController : BaseApiController
 {
-    public ManufacturerController(UniversityOrderAPIDbContext db) : base(db) { }
+    public ManufacturerController(UniversityOrderAPIDbContext db, IOptions<Config> config) : base(db, config) { }
 
     [HttpGet("{id:int}")]
     public async Task<GetManufacturerResponse> GetManufacturer(int id)
@@ -67,7 +69,7 @@ public class ManufacturerController : BaseApiController
             new EditManufacturerCommandHandler(Db);
 
         var response = await commandHandler
-            .Handle(new EditManufacturerCommand(GetStudentStoreId, request.Adapt<ManufacturerDTO>()), new CancellationToken());
+            .Handle(new EditManufacturerCommand(GetStudentStoreId, request.Item.Adapt<ManufacturerDTO>()), new CancellationToken());
 
         return new EditManufacturerResponse
         {

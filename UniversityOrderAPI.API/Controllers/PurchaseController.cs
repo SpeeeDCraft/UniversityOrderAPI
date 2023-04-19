@@ -1,5 +1,7 @@
 ﻿using Mapster;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using UniversityOrderAPI.BLL;
 using UniversityOrderAPI.BLL.Command;
 using UniversityOrderAPI.BLL.Purchase;
 using UniversityOrderAPI.DAL;
@@ -13,7 +15,7 @@ namespace UniversityOrderAPI.Controllers;
 [Route("[controller]")]
 public class PurchaseController : BaseApiController
 {
-    public PurchaseController(UniversityOrderAPIDbContext db) : base(db) { }
+    public PurchaseController(UniversityOrderAPIDbContext db, IOptions<Config> config) : base(db, config) { }
 
     [HttpGet("{id:int}")]
     public async Task<GetPurchaseResponse> GetPurchase(int id)

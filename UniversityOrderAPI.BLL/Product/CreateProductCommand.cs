@@ -25,7 +25,7 @@ public class CreateProductCommandHandler : Command<UniversityOrderAPIDbContext>,
         Config = config;
     }
 
-    public async Task<CreateProductCommandResult> Handle(CreateProductCommand request, CancellationToken? cancellationToken)
+    public Task<CreateProductCommandResult> Handle(CreateProductCommand request, CancellationToken? cancellationToken)
     {
         var maxSlotsPerStudent = Config.Value.MaxSlotsPerStudent;
 
@@ -42,15 +42,15 @@ public class CreateProductCommandHandler : Command<UniversityOrderAPIDbContext>,
             throw new Exception("Product description is null or empty");
 
         var categoryExists = DbContext.Categories
-            .AnyAsync(el => el.Id == request.Product.CategoryId);
+            .Any(el => el.Id == request.Product.CategoryId);
+
+        if (!categoryExists)
+            throw new Exception("CategoryId not found");
 
         var manufacturerExists = DbContext.Manufacturers
-            .AnyAsync(el => el.Id == request.Product.ManufacturerId);
-        
-        if (!await categoryExists)
-            throw new Exception("CategoryId not found");
-    
-        if (!await manufacturerExists)
+            .Any(el => el.Id == request.Product.ManufacturerId);
+                
+        if (!manufacturerExists)
             throw new Exception("ManufacturerId not found");
         
         var newProduct = new DAL.Models.Product
@@ -66,10 +66,10 @@ public class CreateProductCommandHandler : Command<UniversityOrderAPIDbContext>,
         DbContext.Products.Add(newProduct);
 
         DbContext.SaveChanges();
-
-        return new CreateProductCommandResult(
+        
+        return Task.FromResult(new CreateProductCommandResult(
             newProduct.Adapt<ProductDTO>()
-        );
+        ));
     }
 
     public IOptions<Config> Config { get; set; }
