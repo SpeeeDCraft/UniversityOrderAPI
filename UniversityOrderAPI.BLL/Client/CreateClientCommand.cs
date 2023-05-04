@@ -29,7 +29,7 @@ public class CreateClientCommandHandler : Command<UniversityOrderAPIDbContext>,
         var maxSlotsPerStudent = Config.Value.MaxSlotsPerStudent;
 
         var countOfClientsPerStudentStore = DbContext.Clients
-            .Count(el => el.StudentStoreId == request.StudentStoreId);
+            .Count(el => el.StudentStoreId == request.StudentStoreId && el.IsDeleted == false);
 
         if (countOfClientsPerStudentStore >= maxSlotsPerStudent)
             throw new Exception($"Max amount of clients per student store was exceeded, allowed: {maxSlotsPerStudent}");
