@@ -37,13 +37,13 @@ public class EditProductCommandHandler : Command<UniversityOrderAPIDbContext>,
             throw new Exception($"Product with id: {request.Product.Id} not found");
         
         var categoryFromRequest = DbContext.Categories
-            .SingleOrDefault(el => el.Id == request.Product.CategoryId);
+            .SingleOrDefault(el => el.Id == request.Product.CategoryId && el.StudentStoreId == request.StudentStoreId);
 
         if (categoryFromRequest is null)
             throw new Exception($"Category with id: {request.Product.CategoryId} not found");
 
         var manufacturerFromRequest = DbContext.Manufacturers
-            .SingleOrDefault(el => el.Id == request.Product.ManufacturerId);
+            .SingleOrDefault(el => el.Id == request.Product.ManufacturerId && el.StudentStoreId == request.StudentStoreId);
                 
         if (manufacturerFromRequest is null)
             throw new Exception($"Manufacturer with id: {request.Product.ManufacturerId} not found");
