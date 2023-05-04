@@ -36,21 +36,25 @@ public class EditProductCommandHandler : Command<UniversityOrderAPIDbContext>,
         if (product == null)
             throw new Exception($"Product with id: {request.Product.Id} not found");
         
-        var categoryExists = DbContext.Categories.Any(el => el.Id == request.Product.CategoryId);
+        var categoryFromRequest = DbContext.Categories
+            .SingleOrDefault(el => el.Id == request.Product.CategoryId);
 
-        if (!categoryExists)
-            throw new Exception($"CategoryId with id: {request.Product.CategoryId} not found");
-        
-        var manufacturerExistsTask = DbContext.Manufacturers.Any(el => el.Id == request.Product.ManufacturerId);
+        if (categoryFromRequest is null)
+            throw new Exception($"Category with id: {request.Product.CategoryId} not found");
 
-        if (!manufacturerExistsTask)
-            throw new Exception($"ManufacturerId with id: {request.Product.ManufacturerId} not found");
+        var manufacturerFromRequest = DbContext.Manufacturers
+            .SingleOrDefault(el => el.Id == request.Product.ManufacturerId);
+                
+        if (manufacturerFromRequest is null)
+            throw new Exception($"Manufacturer with id: {request.Product.ManufacturerId} not found");
         
         product.Name = request.Product.Name;
         product.Description = request.Product.Description;
         product.Cost = request.Product.Cost;
         product.CategoryId = request.Product.CategoryId;
         product.ManufacturerId = request.Product.ManufacturerId;
+        product.Category = categoryFromRequest;
+        product.Manufacturer = manufacturerFromRequest;
 
         DbContext.SaveChanges();
 

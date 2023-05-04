@@ -41,17 +41,17 @@ public class CreateProductCommandHandler : Command<UniversityOrderAPIDbContext>,
         if (string.IsNullOrEmpty(request.Product.Description))
             throw new Exception("Product description is null or empty");
 
-        var categoryExists = DbContext.Categories
-            .Any(el => el.Id == request.Product.CategoryId);
+        var categoryFromRequest = DbContext.Categories
+            .SingleOrDefault(el => el.Id == request.Product.CategoryId);
 
-        if (!categoryExists)
-            throw new Exception("CategoryId not found");
+        if (categoryFromRequest is null)
+            throw new Exception($"Category with id: {request.Product.CategoryId} not found");
 
-        var manufacturerExists = DbContext.Manufacturers
-            .Any(el => el.Id == request.Product.ManufacturerId);
+        var manufacturerFromRequest = DbContext.Manufacturers
+            .SingleOrDefault(el => el.Id == request.Product.ManufacturerId);
                 
-        if (!manufacturerExists)
-            throw new Exception("ManufacturerId not found");
+        if (manufacturerFromRequest is null)
+            throw new Exception($"Manufacturer with id: {request.Product.ManufacturerId} not found");
         
         var newProduct = new DAL.Models.Product
         {
@@ -60,7 +60,9 @@ public class CreateProductCommandHandler : Command<UniversityOrderAPIDbContext>,
             Description = request.Product.Description,
             Cost = request.Product.Cost,
             CategoryId = request.Product.CategoryId,
-            ManufacturerId = request.Product.ManufacturerId
+            ManufacturerId = request.Product.ManufacturerId,
+            Category = categoryFromRequest,
+            Manufacturer = manufacturerFromRequest
         };
 
         DbContext.Products.Add(newProduct);
