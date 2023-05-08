@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Options;
 using UniversityOrderAPI.BLL.Command;
 using UniversityOrderAPI.DAL;
+using UniversityOrderAPI.DAL.Models;
 
 namespace UniversityOrderAPI.BLL.Client;
 
@@ -36,6 +37,12 @@ public class CreateClientCommandHandler : Command<UniversityOrderAPIDbContext>,
         
         if (string.IsNullOrEmpty(request.Client.FirstName))
             throw new Exception("Client name null or empty");
+
+        if (
+            (int)request.Client.Sex < 0 ||
+            (int)request.Client.Sex >= Enum.GetNames(typeof(Sex)).Length
+        )
+            throw new Exception("Sex of client specified incorrectly");
 
         var phoneNumber = request.Client.PhoneNumber;
 
