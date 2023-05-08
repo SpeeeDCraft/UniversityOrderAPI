@@ -42,6 +42,12 @@ public class CreateOrderCommandHandler : Command<UniversityOrderAPIDbContext>,
         if (client is null)
             throw new Exception($"Client with id: {request.Order.ClientId} not found");
         
+        if (
+            (int)request.Order.Status < 0 ||
+            (int)request.Order.Status >= Enum.GetNames(typeof(OrderStatusDTO)).Length
+        )
+            throw new Exception("OrderStatus of order specified incorrectly");
+        
         var newOrder = new DAL.Models.Order
         {
             StudentStoreId = request.StudentStoreId,

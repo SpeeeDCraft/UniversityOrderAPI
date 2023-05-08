@@ -33,6 +33,12 @@ public class EditOrderCommandHandler : Command<UniversityOrderAPIDbContext>,
         if (client is null)
             throw new Exception($"Client with id: {request.Order.ClientId} not found");
         
+        if (
+            (int)request.Order.Status < 0 ||
+            (int)request.Order.Status >= Enum.GetNames(typeof(OrderStatusDTO)).Length
+        )
+            throw new Exception("OrderStatus of order specified incorrectly");
+        
         var oldOrders = DbContext.OrderItems.Where(el => 
             el.StudentStoreId == request.StudentStoreId && el.OrderId == request.Order.Id).ToList();
 
