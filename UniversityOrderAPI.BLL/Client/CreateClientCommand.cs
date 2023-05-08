@@ -51,7 +51,7 @@ public class CreateClientCommandHandler : Command<UniversityOrderAPIDbContext>,
             if (phoneNumber.Length is > 20 or < 4)
                 throw new Exception($"Phone number length must contain 4-20 characters, but received {phoneNumber.Length}");
             
-            if (!IsDigitsOnly(phoneNumber))
+            if (!phoneNumber.IsDigitsOnly())
                 throw new Exception("Phone number must contain only digits");
         }
 
@@ -73,11 +73,6 @@ public class CreateClientCommandHandler : Command<UniversityOrderAPIDbContext>,
         return Task.FromResult(new CreateClientCommandResult(
             newClient.Adapt<ClientDTO>()));
     }
-
-    private static bool IsDigitsOnly(string str)
-    {
-        return str.All(c => c is >= '0' and <= '9');
-    }
-
+    
     public IOptions<Config> Config { get; set; }
 }
