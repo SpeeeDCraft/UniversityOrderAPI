@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Options;
 using UniversityOrderAPI.BLL.Command;
 using UniversityOrderAPI.DAL;
+using UniversityOrderAPI.DAL.Models;
 
 namespace UniversityOrderAPI.BLL.Client;
 
@@ -29,13 +30,19 @@ public class CreateClientCommandHandler : Command<UniversityOrderAPIDbContext>,
         var maxSlotsPerStudent = Config.Value.MaxSlotsPerStudent;
 
         var countOfClientsPerStudentStore = DbContext.Clients
-            .Count(el => el.StudentStoreId == request.StudentStoreId);
+            .Count(el => el.StudentStoreId == request.StudentStoreId && el.IsDeleted == false);
 
         if (countOfClientsPerStudentStore >= maxSlotsPerStudent)
             throw new Exception($"Max amount of clients per student store was exceeded, allowed: {maxSlotsPerStudent}");
         
         if (string.IsNullOrEmpty(request.Client.FirstName))
             throw new Exception("Client name null or empty");
+
+        if (
+            (int)request.Client.Sex < 0 ||
+            (int)request.Client.Sex >= Enum.GetNames(typeof(Sex)).Length
+        )
+            throw new Exception("Sex of client specified incorrectly");
 
         var phoneNumber = request.Client.PhoneNumber;
 
@@ -44,7 +51,7 @@ public class CreateClientCommandHandler : Command<UniversityOrderAPIDbContext>,
             if (phoneNumber.Length is > 20 or < 4)
                 throw new Exception($"Phone number length must contain 4-20 characters, but received {phoneNumber.Length}");
             
-            if (!IsDigitsOnly(phoneNumber))
+            if (!phoneNumber.IsDigitsOnly())
                 throw new Exception("Phone number must contain only digits");
         }
 
@@ -66,11 +73,6 @@ public class CreateClientCommandHandler : Command<UniversityOrderAPIDbContext>,
         return Task.FromResult(new CreateClientCommandResult(
             newClient.Adapt<ClientDTO>()));
     }
-
-    private static bool IsDigitsOnly(string str)
-    {
-        return str.All(c => c is >= '0' and <= '9');
-    }
-
+    
     public IOptions<Config> Config { get; set; }
 }

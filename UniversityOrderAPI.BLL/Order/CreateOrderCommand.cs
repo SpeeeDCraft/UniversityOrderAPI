@@ -36,6 +36,18 @@ public class CreateOrderCommandHandler : Command<UniversityOrderAPIDbContext>,
         if (countOfOrdersPerStudentStore >= maxSlotsPerStudent)
             throw new Exception($"Max amount of orders per student store was exceeded, allowed: {maxSlotsPerStudent}");
 
+        var client = DbContext.Clients.SingleOrDefault(el =>
+            el.StudentStoreId == request.StudentStoreId && el.Id == request.Order.ClientId && el.IsDeleted == false);
+
+        if (client is null)
+            throw new Exception($"Client with id: {request.Order.ClientId} not found");
+        
+        if (
+            (int)request.Order.Status < 0 ||
+            (int)request.Order.Status >= Enum.GetNames(typeof(OrderStatusDTO)).Length
+        )
+            throw new Exception("OrderStatus of order specified incorrectly");
+        
         var newOrder = new DAL.Models.Order
         {
             StudentStoreId = request.StudentStoreId,
@@ -49,7 +61,7 @@ public class CreateOrderCommandHandler : Command<UniversityOrderAPIDbContext>,
 
                 return element;
             }).ToList(),
-            Client = DbContext.Clients.Single(el => el.Id == request.Order.ClientId)
+            Client = client
         };
 
         DbContext.Order.Add(newOrder);

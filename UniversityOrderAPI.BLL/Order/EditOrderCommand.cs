@@ -27,6 +27,18 @@ public class EditOrderCommandHandler : Command<UniversityOrderAPIDbContext>,
         if (order is null)
             throw new Exception($"Order with id {request.Order.Id} not found");
 
+        var client = DbContext.Clients.SingleOrDefault(el =>
+            el.StudentStoreId == request.StudentStoreId && el.Id == request.Order.ClientId && el.IsDeleted == false);
+
+        if (client is null)
+            throw new Exception($"Client with id: {request.Order.ClientId} not found");
+        
+        if (
+            (int)request.Order.Status < 0 ||
+            (int)request.Order.Status >= Enum.GetNames(typeof(OrderStatusDTO)).Length
+        )
+            throw new Exception("OrderStatus of order specified incorrectly");
+        
         var oldOrders = DbContext.OrderItems.Where(el => 
             el.StudentStoreId == request.StudentStoreId && el.OrderId == request.Order.Id).ToList();
 
@@ -42,7 +54,7 @@ public class EditOrderCommandHandler : Command<UniversityOrderAPIDbContext>,
 
             return element;
         }).ToList();
-        order.Client = DbContext.Clients.Single(el => el.Id == request.Order.ClientId);
+        order.Client = client;
 
         DbContext.SaveChanges();
 
